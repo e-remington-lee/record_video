@@ -1,4 +1,5 @@
-import os 
+
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -6,7 +7,7 @@ import pyautogui
 
 def main():
     width, height = pyautogui.size()
-    Record(width, height).record_screen()
+    Record(width, height, True).record_screen()
 
 class Record():
     def __init__(self, width, height, video=False):
@@ -15,20 +16,22 @@ class Record():
         self.video = video
 
     def record_screen(self):
-        if not os.path.isdir("./output"):
-            os.mkdir("./output")
+        Path("./output").mkdir(exist_ok=True)
 
         if self.video:
+            path = "./output/video"
+            Path(path).mkdir(exist_ok=True)
+
             fourcc = cv2.cv2.VideoWriter_fourcc(*"XVID")
             # # create the video write object
             screen_size = (self.width, self.height)
-            out = cv2.cv2.VideoWriter("output.avi", fourcc, 20.0, (screen_size))
+            out = cv2.cv2.VideoWriter(path+"/output.avi", fourcc, 20.0, (screen_size))
 
         count = 1
         while True:
-            # path = "./output/screen_record_frames/"
-            # if not os.path.isdir(path):
-
+            path = "./output/screen_record_frames/"
+            Path(path).mkdir(parents=True, exist_ok=True)
+            
             # make a screenshot
             img = pyautogui.screenshot()
             # img = pyautogui.screenshot(region=(0, 0, 300, 400))
@@ -39,7 +42,7 @@ class Record():
 
             #writes the frame
             txt = "clip_"+str(count)+".jpg"
-            cv2.cv2.imwrite("./output/screen_record_frames/" + txt, frame)
+            cv2.cv2.imwrite(path + txt, frame)
 
             if count >= 300:
                 count = 1
@@ -60,6 +63,6 @@ class Record():
         # make sure everything is closed when exited
         cv2.cv2.destroyAllWindows()
         out.release()
-
+        
 if __name__== "__main__":
    main()
