@@ -71,8 +71,13 @@ class Label():
             file_ = os.path.join(final_dir, pic)
             emotion_dir = os.path.join(self.test, emotion)
             dest_ = os.path.join(emotion_dir, pic)
+            if os.path.getsize(file_) == 0:
+                print("fuck you")             
             if os.path.getsize(file_) != 0:
-                copyfile(file_, dest_)
+                try:
+                    copyfile(file_, dest_)
+                except:
+                    print("Oops!  That was no valid number.  Try again...")
 
     def delete_files(self, mypath):
         for root, dirs, files in os.walk(mypath):
