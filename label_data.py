@@ -11,9 +11,10 @@ def main():
     Label().label_data(parent_path)
 
 class Label():
-    def __init__(self, train="emotions/train/", test="emotions/test/"):
+    def __init__(self, train="emotions/train/", test="emotions/test/", validation="emotions/validation/"):
         self.train = train
         self.test = test
+        self.validation = validation
         self.anger = "anger"
         self.disgust = "disgust"
         self.fear = "fear"
@@ -21,7 +22,7 @@ class Label():
         self.neutral = "neutral"
         self.sadness = "sadness"
         self.surprise = "surprise"
-        self.train_test_split = 0.9
+        self.train_test_split = 0.8
 
     def label_data(self, parent_path):
         list_dir = os.listdir(parent_path)
@@ -49,7 +50,7 @@ class Label():
                     else:
                         continue
 
-    def copy_files(self, final_dir, emotion, percent=0.2):
+    def copy_files(self, final_dir, emotion, percent=0.6):
         # Speed up training just use less data
         full_dir = os.listdir(final_dir)
         random.shuffle(full_dir)
@@ -58,7 +59,13 @@ class Label():
 
         split_size = int(len(list_dir)*self.train_test_split)
         train = list_dir[0:split_size]
-        test = list_dir[split_size:]
+
+        #create test and validation directories
+        test_and_validation = list_dir[split_size:]
+        test_and_validation_length = int(len(test_and_validation))
+
+        test = test_and_validation[:test_and_validation_length//2]
+        validation = test_and_validation[test_and_validation_length//2:]
 
         for pic in train:
             file_ = os.path.join(final_dir, pic)
@@ -70,14 +77,16 @@ class Label():
         for pic in test:
             file_ = os.path.join(final_dir, pic)
             emotion_dir = os.path.join(self.test, emotion)
-            dest_ = os.path.join(emotion_dir, pic)
-            if os.path.getsize(file_) == 0:
-                print("fuck you")             
+            dest_ = os.path.join(emotion_dir, pic)          
             if os.path.getsize(file_) != 0:
-                try:
-                    copyfile(file_, dest_)
-                except:
-                    print("Oops!  That was no valid number.  Try again...")
+                copyfile(file_, dest_)
+
+        for pic in validation:
+            file_ = os.path.join(final_dir, pic)
+            emotion_dir = os.path.join(self.validation, emotion)
+            dest_ = os.path.join(emotion_dir, pic)          
+            if os.path.getsize(file_) != 0:
+                copyfile(file_, dest_)
 
     def delete_files(self, mypath):
         for root, dirs, files in os.walk(mypath):
