@@ -17,7 +17,7 @@ from tensorflow.keras.preprocessing import image
 
 def main():
     xyz = tf.keras.models.load_model("emotion_model.model")
-    test_dir = "emotions/test/"
+    test_dir = "production_test/"
     test_datagen = ImageDataGenerator(rescale=1./255)
     test_generator = test_datagen.flow_from_directory(test_dir, target_size=(256,256), 
     batch_size=1, class_mode="categorical")
