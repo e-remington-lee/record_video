@@ -5,11 +5,14 @@ tfe
 output
 FERG_DB_256
 emotions
-quick
 img_test
 jaffedbase
 checkpoint
 KDEF_and_AKDEF
 ffhq_data
 face_test
+production_test
+emotion_model.model
+
+
 
