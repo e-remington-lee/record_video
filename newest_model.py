@@ -25,11 +25,11 @@ if gpus:
 
 def main():  
     xyz = tf.keras.models.load_model("emotion_model.model")
-    test_dir = "production_test/"
-    test_datagen = ImageDataGenerator(rescale=1./255)
-    test_generator = test_datagen.flow_from_directory(test_dir, target_size=(256,256), 
-    batch_size=1, class_mode="categorical")
-    xyz.evaluate(test_generator)
+    # test_dir = "production_test/"
+    # test_datagen = ImageDataGenerator(rescale=1./255)
+    # test_generator = test_datagen.flow_from_directory(test_dir, target_size=(256,256), 
+    # batch_size=1, class_mode="categorical")
+    # xyz.evaluate(test_generator)
 
     width, height = pyautogui.size()
     try:
@@ -37,6 +37,7 @@ def main():
     except KeyboardInterrupt:
         tf.keras.backend.clear_session()
         print("Ending session")
+
 class Faces:
     def __init__(self, width, height, model):
         self.width = width
@@ -81,15 +82,14 @@ class Faces:
                 if count >= 1000:
                     count = 1
                 count+=1
-                face_detected = False
+
 
             k = cv2.waitKey(30)
             if k == 27:
                 break
 
         out.release()
-        cv2.destroyAllWindows()
-    
+        cv2.destroyAllWindows()   
     
 
     def predict(self, face):
