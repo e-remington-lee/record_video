@@ -15,6 +15,13 @@ from tensorflow.keras.preprocessing import image
 # tf.config.gpu.set_per_process_memory_growth(True)
 tf.keras.backend.clear_session()
 tf.compat.v1.disable_eager_execution()
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  try:
+    for gpu in gpus:
+      tf.config.experimental.set_memory_growth(gpu, True)
+  except RuntimeError as e:
+    print(e)
 
 def main():  
     xyz = tf.keras.models.load_model("emotion_model.model")
@@ -28,6 +35,7 @@ def main():
     try:
         Faces(width, height, xyz).find_face()
     except KeyboardInterrupt:
+        tf.keras.backend.clear_session()
         print("Ending session")
 class Faces:
     def __init__(self, width, height, model):
@@ -52,16 +60,17 @@ class Faces:
             img = np.array(img)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+  
             out.write(img)
 
-            face_detected = False
-            if not face_detected:
-                print("-----face not detected------")
+            # face_detected = False
+            # if not face_detected:
+            #     print("-----face not detected------")
 
             for (x,y,w,h) in faces:
-                face_detected = True
-                if face_detected:
-                    print("---detected face!---")
+                # face_detected = True
+                # if face_detected:
+                #     print("---detected face!---")
 
                 cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
                 face = gray[y:y+h, x:x+w]
@@ -73,7 +82,7 @@ class Faces:
                     count = 1
                 count+=1
                 face_detected = False
-                
+
             k = cv2.waitKey(30)
             if k == 27:
                 break
