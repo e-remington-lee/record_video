@@ -30,7 +30,7 @@ from tensorflow.keras.preprocessing import image
 # tf.config.gpu.set_per_process_memory_growth(True)
 
 def main():
-    debug = False
+    debug = True
     begin_session_allocate_memory()
     model = tf.keras.models.load_model("emotion_model.model")
 
@@ -48,7 +48,6 @@ def main():
         classifier.find_face()
     except KeyboardInterrupt:
         if out:
-            print("released out")
             out.release()
         cv2.destroyAllWindows()  
         tf.keras.backend.clear_session()
