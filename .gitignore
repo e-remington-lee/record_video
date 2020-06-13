@@ -13,8 +13,9 @@ ffhq_data
 face_test
 production_test
 emotion_model.model
-saved
+emotion_model_generated_faces.model
 fer2013.csv
+emotions_copy_test_dir
 
 
 
