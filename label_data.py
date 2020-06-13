@@ -22,7 +22,7 @@ class Label():
         self.neutral = "neutral"
         self.sadness = "sadness"
         self.surprise = "surprise"
-        self.train_test_split = 0.8
+        self.train_test_split = 1
 
     def label_data(self, parent_path):
         list_dir = os.listdir(parent_path)
