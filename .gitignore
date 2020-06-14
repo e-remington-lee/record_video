@@ -14,6 +14,7 @@ face_test
 production_test
 emotion_model.model
 emotion_model_generated_faces.model
+emotion_model_v1.0_realfaces.model
 fer2013.csv
 emotions_copy_test_dir
 
