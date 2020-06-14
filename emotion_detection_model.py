@@ -32,7 +32,7 @@ from tensorflow.keras.preprocessing import image
 def main():
     debug = True
     begin_session_allocate_memory()
-    model = tf.keras.models.load_model("emotion_model.model")
+    model = tf.keras.models.load_model("emotion_model_v1.0_realfaces.model")
 
     width, height = pyautogui.size()
     path = "./output/video"
@@ -64,9 +64,9 @@ class Faces:
         
     
     def find_face(self):
-        face_cascade = cv2.CascadeClassifier("hc.xml")
-        count = 1
+        front_face_cascade = cv2.CascadeClassifier("cascades\haarcascade_frontalface_default.xml")
 
+        count = 1
         while True:
             try:
                 img = pyautogui.screenshot()
@@ -74,8 +74,7 @@ class Faces:
                 continue
 
             img = np.array(img)
-            faces = face_cascade.detectMultiScale(img, 1.3, 5)
-
+            faces = front_face_cascade.detectMultiScale(img, 1.1, 4, minSize=(40,40))
             if self.out:
                 self.out.write(img)
 
@@ -107,7 +106,27 @@ class Faces:
       
         final_image = np.expand_dims(final_image, 0)
         acc = self.model.predict([final_image])
-        return acc
+        output = ""
+        result = acc[0]
+
+        if result[0] > 0.5:
+            output += "angry"
+        if result[1] > 0.5:
+            output += "disgust"
+        if result[2] > 0.5:
+            output += "fear"
+        if result[3] > 0.5:
+            output += "joy"
+        if result[4] > 0.5:
+            output += "neutral"
+        if result[5] > 0.5:
+            output += "sadness"
+        if result[6] > 0.5:
+            output += "surprise"
+        if output == "":
+            output = "No result"
+
+        return output
 
 
 def begin_session_allocate_memory():
