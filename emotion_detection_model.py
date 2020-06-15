@@ -101,7 +101,7 @@ class Faces:
 
 
     def predict(self, face):
-        size = 256
+        size = 64
         final_image = cv2.resize(face, (size,size))
       
         final_image = np.expand_dims(final_image, 0)

@@ -89,7 +89,7 @@ class Faces:
                         face = ImageGrab.grab(bbox=(x-50,y-50,x+h+50,y+h+50))
                         face = np.array(face)
                         if self.out:
-                                self.out.write(face)
+                            self.out.write(face)
                         print(self.predict(face))
                         
                         if self.out:
