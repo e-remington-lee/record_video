@@ -8,7 +8,7 @@ parent_path = "FERG_DB_256"
 
 def main():
     Label().delete_files("emotions")
-    Label().label_data(parent_path)
+    # Label().label_data(parent_path)
 
 class Label():
     def __init__(self, train="emotions/train/", test="emotions/test/", validation="emotions/validation/"):
