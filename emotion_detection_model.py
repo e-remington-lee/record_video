@@ -32,7 +32,7 @@ from tensorflow.keras.preprocessing import image
 def main():
     debug = True
     begin_session_allocate_memory()
-    model = tf.keras.models.load_model("emotion_model_v1.0_realfaces.model")
+    model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
 
     width, height = pyautogui.size()
     path = "./output/video"
@@ -74,7 +74,7 @@ class Faces:
                 continue
 
             img = np.array(img)
-            faces = front_face_cascade.detectMultiScale(img, 1.1, 4, minSize=(40,40))
+            faces = front_face_cascade.detectMultiScale(img, 1.3, 5, minSize=(70,70))
             if self.out:
                 self.out.write(img)
 
