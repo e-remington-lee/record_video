@@ -77,16 +77,16 @@ class Faces:
                 continue
 
             img = np.array(img)
-            faces = front_face_cascade.detectMultiScale(img, 1.3, 5, minSize=(40,40))
+            faces = front_face_cascade.detectMultiScale(img, 1.3, 5, minSize=(70,70))
             
             if len(faces) > 0:
                 save_time = 0
                 while save_time < 10:
                     self.face_detected = True
                     for (x,y,w,h) in faces:
-                        # cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
-                        # face = img[y:y+h, x:x+w]
-                        face = ImageGrab.grab(bbox=(x-50,y-50,x+h+50,y+h+50))
+                        cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
+                        face = img[y:y+h, x:x+w]
+                        face = ImageGrab.grab(bbox=(x-50,y-50,x+w+50,y+h+50))
                         face = np.array(face)
                         if self.out:
                             self.out.write(face)
