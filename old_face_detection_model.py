@@ -27,15 +27,14 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing import image
 
+
 # tf.config.gpu.set_per_process_memory_fraction(0.75)
 # tf.config.gpu.set_per_process_memory_growth(True)
 
 def main():
- 
-
     debug = True
     begin_session_allocate_memory()
-    model = tf.keras.models.load_model("emotion_model_v1.0_realfaces.model")
+    model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
 
     width, height = pyautogui.size()
     path = "./output/video"
@@ -55,6 +54,9 @@ def main():
         cv2.destroyAllWindows()  
         tf.keras.backend.clear_session()
         print("Ending session")
+    cv2.destroyAllWindows()  
+    tf.keras.backend.clear_session()
+    print("Ending session with function")
 
 class Faces:
     def __init__(self, width, height, model, path, out):
@@ -63,6 +65,7 @@ class Faces:
         self.model = model
         self.path = path
         self.out = out
+        self.run_model = True
         self.face_detected = False  
         
     
@@ -70,7 +73,7 @@ class Faces:
         front_face_cascade = cv2.CascadeClassifier("cascades\haarcascade_frontalface_default.xml")
 
         count = 1
-        while True:
+        while self.run_model:
             try:
                 img = pyautogui.screenshot()
             except OSError:
@@ -107,6 +110,9 @@ class Faces:
             self.out.release()
         cv2.destroyAllWindows()  
 
+    
+    def stop(self):
+        self.run_model = False
 
     def predict(self, face):
         size = 256
@@ -155,4 +161,5 @@ def begin_session_allocate_memory():
         except RuntimeError as e:
             print(e)
 
-main()
+
+# main()
