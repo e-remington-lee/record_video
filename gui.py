@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
-from face_detection_model import main, Faces
+from emotion_detection_model import main, Faces
 
 
 def main_2():
