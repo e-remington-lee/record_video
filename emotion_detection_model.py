@@ -17,6 +17,7 @@ from pathlib import Path
 import os
 import cv2.cv2 as cv2
 import pyautogui
+import PIL
 
 import tensorflow as tf
 import numpy as np
@@ -69,7 +70,8 @@ class Faces:
         count = 1
         while True:
             try:
-                img = pyautogui.screenshot()
+                # img = pyautogui.screenshot()
+                img = PIL.ImageGrab.grab(bbox=None)
             except OSError:
                 continue
 
@@ -81,14 +83,17 @@ class Faces:
             if len(faces) > 0:
                 self.face_detected = True
                 for (x,y,w,h) in faces:
-                    cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
-                    face = img[y:y+h, x:x+w]
+                    # if self.out:
+                    #     cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 1)
+                    face = img[y-50:y+h+50, x-50:x+w+50]
                     print(self.predict(face))
                     
                     if self.out:
                         txt = "clip_"+str(count)+".jpg"
-                        cv2.imwrite(self.path + txt, img)
-                        if count >= 1000:
+                        # cv2.imwrite(self.path + txt, face)
+                        im = PIL.Image.fromarray(face)
+                        im.save(self.path+txt, "JPEG")
+                        if count >= 200:
                             count = 1
                         count+=1
             else:
@@ -101,7 +106,7 @@ class Faces:
 
 
     def predict(self, face):
-        size = 64
+        size = 128
         final_image = cv2.resize(face, (size,size))
       
         final_image = np.expand_dims(final_image, 0)
@@ -138,12 +143,6 @@ def begin_session_allocate_memory():
         try:
             for gpu in gpus:
                 tf.config.experimental.set_memory_growth(gpu, True)
-        except RuntimeError as e:
-            print(e)
-    else:
-        try:
-            for cpu in cpus:
-                tf.config.experimental.set_memory_growth(cpu, True)
         except RuntimeError as e:
             print(e)
 
