@@ -33,15 +33,16 @@ from tensorflow.keras.preprocessing import image
 def main():
     debug = True
     begin_session_allocate_memory()
-    model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
+    # model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
+    model = tf.keras.models.load_model("faceNet/1")
 
     width, height = pyautogui.size()
-    path = "./output/video"
+    path = "output/"
     out = None
     if debug:
         fourcc = cv2.VideoWriter_fourcc(*"XVID")
         screen_size = (width, height)
-        out = cv2.VideoWriter(path+"/output.avi", fourcc, 20.0, (screen_size))
+        out = cv2.VideoWriter(path+"video/output.avi", fourcc, 20.0, (screen_size))
     Path(path).mkdir(exist_ok=True)
     
     classifier = Faces(width, height, model, path, out)
@@ -76,7 +77,7 @@ class Faces:
                 continue
 
             img = np.array(img)
-            faces = front_face_cascade.detectMultiScale(img, 1.3, 5, minSize=(70,70))
+            faces = front_face_cascade.detectMultiScale(img, 1.1, 5, minSize=(30,30))
             if self.out:
                 self.out.write(img)
 
@@ -86,10 +87,11 @@ class Faces:
                     # if self.out:
                     #     cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 1)
                     face = img[y-50:y+h+50, x-50:x+w+50]
-                    print(self.predict(face))
+                    prediction = self.predict(face)
+                    print(prediction)
                     
                     if self.out:
-                        txt = "clip_"+str(count)+".jpg"
+                        txt = prediction+"_predicted"+str(count)+".jpg"
                         # cv2.imwrite(self.path + txt, face)
                         im = PIL.Image.fromarray(face)
                         im.save(self.path+txt, "JPEG")
