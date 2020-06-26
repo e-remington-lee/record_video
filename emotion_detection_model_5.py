@@ -34,7 +34,7 @@ def main():
     debug = True
     begin_session_allocate_memory()
     # model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
-    model = tf.keras.models.load_model("faceNet/resNet50")
+    model = tf.keras.models.load_model("faceNet\\3cnn_2dnn_no_regularization")
 
     width, height = pyautogui.size()
     path = "output/"
@@ -77,7 +77,7 @@ class Faces:
                 continue
 
             img = np.array(img)
-            faces = front_face_cascade.detectMultiScale(img, 1.1, 5, minSize=(30,30))
+            faces = front_face_cascade.detectMultiScale(img, 1.1, 5, minSize=(70,70))
             if self.out:
                 self.out.write(img)
 
@@ -86,7 +86,8 @@ class Faces:
                 for (x,y,w,h) in faces:
                     # if self.out:
                     #     cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 1)
-                    face = img[y-50:y+h+50, x-50:x+w+50]
+                    # TODO increase the face capture size? or not
+                    face = img[y:y+h, x:x+w]
                     prediction = self.predict(face)
                     print(prediction)
                     
@@ -111,6 +112,7 @@ class Faces:
         size = 128
         # this line causes errors sometimes, unsure
         final_image = cv2.resize(face, (size,size))
+        # final_image = tf.reshape(face, (size, size))
       
         final_image = np.expand_dims(final_image, 0)
         acc = self.model.predict([final_image])
@@ -118,19 +120,15 @@ class Faces:
         result = acc[0]
 
         if result[0] > 0.5:
-            output += "angry"
+            output += "anger_disgust"
         if result[1] > 0.5:
-            output += "disgust"
-        if result[2] > 0.5:
-            output += "fear"
-        if result[3] > 0.5:
             output += "joy"
-        if result[4] > 0.5:
+        if result[2] > 0.5:
             output += "neutral" 
-        if result[5] > 0.5:
+        if result[3] > 0.5:
             output += "sadness"
-        if result[6] > 0.5:
-            output += "surprise"
+        if result[4] > 0.5:
+            output += "surprise_fear"
         if output == "":
             output = "No result"
 
