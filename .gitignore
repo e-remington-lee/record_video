@@ -5,6 +5,8 @@ tfe
 output
 FERG_DB_256
 emotions
+emotions_5
+emotions_copy_test_dir
 img_test
 jaffedbase
 checkpoint
@@ -17,7 +19,7 @@ emotion_model_generated_faces.model
 emotion_model_v1.0_realfaces.model
 emotion_model_v1.0_3cnn_2dns_input64x64.model
 fer2013.csv
-emotions_copy_test_dir
+
 origin
 build
 dist
