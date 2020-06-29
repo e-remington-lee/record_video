@@ -21,14 +21,6 @@ import PIL
 
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras import layers
-from tensorflow.keras import Model
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.preprocessing import image
-
-# tf.config.gpu.set_per_process_memory_fraction(0.75)
-# tf.config.gpu.set_per_process_memory_growth(True)
 
 def main():
     debug = True
@@ -87,6 +79,7 @@ class Faces:
                     # if self.out:
                     #     cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 1)
                     # TODO increase the face capture size? or not
+                    # TODO try/except and catch the error that crashes the program if the face is less than 70
                     face = img[y:y+h, x:x+w]
                     prediction = self.predict(face)
                     print(prediction)
@@ -99,6 +92,7 @@ class Faces:
                         if count >= 200:
                             count = 1
                         count+=1
+                   
             else:
                 self.face_detected = False
                 print("-----face not detected------")
@@ -139,7 +133,6 @@ def begin_session_allocate_memory():
     tf.keras.backend.clear_session()
     tf.compat.v1.disable_eager_execution()
     gpus = tf.config.experimental.list_physical_devices('GPU')
-    cpus = tf.config.experimental.list_physical_devices('CPU')
     if gpus:
         try:
             for gpu in gpus:
@@ -147,4 +140,4 @@ def begin_session_allocate_memory():
         except RuntimeError as e:
             print(e)
 
-main()
+# main()
