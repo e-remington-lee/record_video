@@ -140,4 +140,4 @@ def begin_session_allocate_memory():
         except RuntimeError as e:
             print(e)
 
-# main()
+main()

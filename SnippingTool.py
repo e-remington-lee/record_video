@@ -3,9 +3,10 @@ import numpy as np
 import cv2
 from PIL import ImageGrab
 from PyQt5 import QtWidgets, QtCore, QtGui
-import SnippingMenu
+import gui
 from PyQt5.QtCore import Qt
 
+import PIL
 
 class SnippingWidget(QtWidgets.QWidget):
     num_snip = 0
@@ -30,8 +31,6 @@ class SnippingWidget(QtWidgets.QWidget):
         SnippingWidget.is_snipping = True
         self.setWindowOpacity(0.3)
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
-        print('Capture the screen...')
-        print('Press q if you want to quit...')
         self.show()
 
     def paintEvent(self, event):
@@ -54,11 +53,6 @@ class SnippingWidget(QtWidgets.QWidget):
         rect = QtCore.QRectF(self.begin, self.end)
         qp.drawRect(rect)
 
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Q:
-            print('Quit')
-            self.close()
-        event.accept()
 
     def mousePressEvent(self, event):
         self.begin = event.pos()
@@ -83,6 +77,10 @@ class SnippingWidget(QtWidgets.QWidget):
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
         QtWidgets.QApplication.processEvents()
         img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
-
+        
+        im = PIL.Image.fromarray(img)
+        im.save("delete.jpg")
         # add to the snips list the object that opens a window of the image
-        SnippingMenu.Menu(img, SnippingWidget.num_snip, (x1, y1, x2, y2))
+        gui.Menu(img, 0, (x1, y1, x2, y2))
+        self.close()
+        # return x1, y1, x2, y2
