@@ -26,7 +26,8 @@ def main():
     debug = True
     begin_session_allocate_memory()
     # model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
-    model = tf.keras.models.load_model("faceNet\\3cnn_2dnn_no_regularization")
+    # model = tf.keras.models.load_model("faceNet\\3cnn_2dnn_no_regularization")
+    model = tf.keras.models.load_model("faceNet\\xNet")
 
     width, height = pyautogui.size()
     path = "output/"
