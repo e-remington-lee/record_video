@@ -29,6 +29,7 @@ class Menu(QMainWindow):
         self.box_y = None
         self.box_w = None
         self.box_h = None
+        self.box_drawn_can_start = False
         
         # New snip
         new_snip_action = QAction("Draw Box", self)
@@ -68,18 +69,19 @@ class Menu(QMainWindow):
         self.box_y = y
         self.box_w = w
         self.box_h = h
+        self.box_drawn_can_start = True
         # else: 
         #     Menu.face_box.close()
         #     Menu.face_box = box.Box(x,y,w,h)
 
     def start_program(self):
-        if Menu.face_box:
+        if self.box_drawn_can_start:
             emotion_detect_5_in_gui.main(self.box_x,self.box_y,self.box_w,self.box_h)
 
-    @staticmethod
-    def close_box():
+    def close_box(self):
         if Menu.face_box:
             Menu.face_box.close_window()
+            self.box_drawn_can_start = False
 
     def paintEvent(self, event):
         painter = QPainter(self)
