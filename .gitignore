@@ -7,7 +7,10 @@ output
 FERG_DB_256
 emotions
 emotions_5
+<<<<<<< HEAD
 emotions_5_test
+=======
+>>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
 emotions_copy_test_dir
 img_test
 jaffedbase
@@ -26,11 +29,10 @@ background.png
 origin
 build
 dist
-
 *.exe
 *.spec
 ISAFE MAIN DATABASE FOR PUBLIC
-
+faceNet
 
 
 
