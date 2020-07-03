@@ -3,7 +3,11 @@ import numpy as np
 import cv2
 from PIL import ImageGrab
 from PyQt5 import QtWidgets, QtCore, QtGui
+<<<<<<< HEAD
 import gui
+=======
+import SnippingMenu
+>>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
 from PyQt5.QtCore import Qt
 
 
