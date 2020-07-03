@@ -26,7 +26,7 @@ background.png
 origin
 build
 dist
-tflite_model
+
 *.exe
 *.spec
 ISAFE MAIN DATABASE FOR PUBLIC
