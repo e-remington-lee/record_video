@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from PIL import ImageGrab
 from PyQt5 import QtWidgets, QtCore, QtGui
-import gui
+import SnippingMenu
 from PyQt5.QtCore import Qt
 
 
@@ -28,11 +28,7 @@ class SnippingWidget(QtWidgets.QWidget):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         SnippingWidget.background = False
         SnippingWidget.is_snipping = True
-<<<<<<< HEAD
-        self.setWindowOpacity(0.2)
-=======
         self.setWindowOpacity(0.3)
->>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
         print('Capture the screen...')
         print('Press q if you want to quit...')
@@ -86,14 +82,7 @@ class SnippingWidget(QtWidgets.QWidget):
         QtWidgets.QApplication.processEvents()
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
         QtWidgets.QApplication.processEvents()
-<<<<<<< HEAD
-        self.parent.create_box(x1, y1, x2, y2)
-        self.close()
-        
-
-=======
         img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
 
         # add to the snips list the object that opens a window of the image
         SnippingMenu.Menu(img, SnippingWidget.num_snip, (x1, y1, x2, y2))
->>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db

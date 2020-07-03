@@ -26,8 +26,12 @@ def main():
     debug = True
     begin_session_allocate_memory()
     # model = tf.keras.models.load_model("emotion_model_v1.0_3cnn_2dns_input64x64.model")
+<<<<<<< HEAD
     # model = tf.keras.models.load_model("faceNet\\3cnn_2dnn_no_regularization")
     model = tf.keras.models.load_model("faceNet\\xNet")
+=======
+    model = tf.keras.models.load_model("faceNet\\3cnn_2dnn_no_regularization")
+>>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
 
     width, height = pyautogui.size()
     path = "output/"
@@ -141,4 +145,8 @@ def begin_session_allocate_memory():
         except RuntimeError as e:
             print(e)
 
+<<<<<<< HEAD
 main()
+=======
+# main()
+>>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db

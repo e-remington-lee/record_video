@@ -2,10 +2,15 @@ video_original
 video_frames
 venv
 tfe
+faceNet
 output
 FERG_DB_256
 emotions
 emotions_5
+<<<<<<< HEAD
+emotions_5_test
+=======
+>>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
 emotions_copy_test_dir
 img_test
 jaffedbase
@@ -20,7 +25,6 @@ emotion_model_v1.0_realfaces.model
 emotion_model_v1.0_3cnn_2dns_input64x64.model
 fer2013.csv
 background.png
-
 
 origin
 build

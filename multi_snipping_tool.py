@@ -1,62 +1,47 @@
+import sys
+from PyQt5 import QtWidgets, QtCore, QtGui
 import tkinter as tk
+from PIL import ImageGrab
 import numpy as np
 import cv2
-from PIL import ImageGrab
-from PyQt5 import QtWidgets, QtCore, QtGui
-import gui
-from PyQt5.QtCore import Qt
 
 
-class SnippingWidget(QtWidgets.QWidget):
-    num_snip = 0
-    is_snipping = False
-    background = True
-
-    def __init__(self, parent=None):
-        super(SnippingWidget, self).__init__()
-        self.parent = parent
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
-
+class MyWidget(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
         root = tk.Tk()
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
         self.setGeometry(0, 0, screen_width, screen_height)
+        self.setWindowTitle(' ')
         self.begin = QtCore.QPoint()
         self.end = QtCore.QPoint()
-
-    def start(self):
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
-        SnippingWidget.background = False
-        SnippingWidget.is_snipping = True
-<<<<<<< HEAD
-        self.setWindowOpacity(0.2)
-=======
         self.setWindowOpacity(0.3)
->>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
-        QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
+        self.num_snip = 0
+        self.is_snipping = False
+        QtWidgets.QApplication.setOverrideCursor(
+            QtGui.QCursor(QtCore.Qt.CrossCursor)
+        )
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         print('Capture the screen...')
         print('Press q if you want to quit...')
         self.show()
 
     def paintEvent(self, event):
-        if SnippingWidget.is_snipping:
-            brush_color = (128, 128, 255, 100)
-            lw = 3
-            opacity = 0.3
-        else:
-            # reset points, so the rectangle won't show up again.
-            self.begin = QtCore.QPoint()
-            self.end = QtCore.QPoint()
+        if self.is_snipping:
             brush_color = (0, 0, 0, 0)
             lw = 0
             opacity = 0
+        else:
+            brush_color = (128, 128, 255, 128)
+            lw = 3
+            opacity = 0.3
 
         self.setWindowOpacity(opacity)
         qp = QtGui.QPainter(self)
         qp.setPen(QtGui.QPen(QtGui.QColor('black'), lw))
         qp.setBrush(QtGui.QColor(*brush_color))
-        rect = QtCore.QRectF(self.begin, self.end)
-        qp.drawRect(rect)
+        qp.drawRect(QtCore.QRect(self.begin, self.end))
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Q:
@@ -74,26 +59,33 @@ class SnippingWidget(QtWidgets.QWidget):
         self.update()
 
     def mouseReleaseEvent(self, event):
-        SnippingWidget.num_snip += 1
-        SnippingWidget.is_snipping = False
-        QtWidgets.QApplication.restoreOverrideCursor()
+        # self.close()
+        self.num_snip += 1
         x1 = min(self.begin.x(), self.end.x())
         y1 = min(self.begin.y(), self.end.y())
         x2 = max(self.begin.x(), self.end.x())
         y2 = max(self.begin.y(), self.end.y())
 
+        self.is_snipping = True
         self.repaint()
         QtWidgets.QApplication.processEvents()
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
+        self.is_snipping = False
+        self.repaint()
         QtWidgets.QApplication.processEvents()
-<<<<<<< HEAD
-        self.parent.create_box(x1, y1, x2, y2)
-        self.close()
-        
-
-=======
+        img_name = 'snip{}.png'.format(self.num_snip)
+        img.save(img_name)
+        print(img_name, 'saved')
         img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
 
-        # add to the snips list the object that opens a window of the image
-        SnippingMenu.Menu(img, SnippingWidget.num_snip, (x1, y1, x2, y2))
->>>>>>> 3635dd56c3407f5f4cc3e5df1399e2ba197952db
+        # cv2.imshow('Captured Image', img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = MyWidget()
+    window.show()
+    app.aboutToQuit.connect(app.deleteLater)
+    sys.exit(app.exec_())
