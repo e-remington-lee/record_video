@@ -25,16 +25,15 @@ import numpy as np
 def main(x,y,w,h):
     debug = True
     begin_session_allocate_memory()
-    model = tf.keras.models.load_model("..\\faceNet\\xNet_noreg_v2_7202_best")
+    model = tf.keras.models.load_model("faceNet\\xNet_noreg_v2_7202_best")
 
     width, height = pyautogui.size()
-    path = "output/"
+    path = "output\\"
     out = None
     if debug:
         fourcc = cv2.VideoWriter_fourcc(*"XVID")
         screen_size = (width, height)
-        out = cv2.VideoWriter(path+"video/output.avi", fourcc, 20.0, (screen_size))
-    Path(path).mkdir(exist_ok=True)
+        out = cv2.VideoWriter(path+"video\\output.avi", fourcc, 20.0, (screen_size))
     
     classifier = Faces(width, height, model, path, out, x,y,w,h)
     try:
@@ -61,8 +60,6 @@ class Faces:
         
     
     def find_face(self):
-        front_face_cascade = cv2.CascadeClassifier("cascades\haarcascade_frontalface_default.xml")
-
         count = 1
         while True:
             try:
@@ -72,33 +69,19 @@ class Faces:
                 continue
 
             img = np.array(img)
-            faces = front_face_cascade.detectMultiScale(img, 1.1, 5, minSize=(30,30))
             if self.out:
                 self.out.write(img)
 
-            if len(faces) > 0:
-                self.face_detected = True
-                for (x,y,w,h) in faces:
-                    # if self.out:
-                    #     cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 1)
-                    # TODO increase the face capture size? or not
-                    # TODO try/except and catch the error that crashes the program if the face is less than 70
-                    face = img[y:y+h, x:x+w]
-                    prediction = self.predict(face)
-                    print(prediction)
-                    
-                    if self.out:
-                        txt = prediction+"_predicted"+str(count)+".jpg"
-                        # cv2.imwrite(self.path + txt, face)
-                        im = PIL.Image.fromarray(face)
-                        im.save(self.path+txt, "JPEG")
-                        if count >= 200:
-                            count = 1
-                        count+=1
-                   
-            else:
-                self.face_detected = False
-                print("-----face not detected------")
+            prediction = self.predict(img)
+            print(prediction)
+            
+            if self.out:
+                txt = prediction+"_predicted"+str(count)+".jpg"
+                im = PIL.Image.fromarray(img)
+                im.save(self.path+txt, "JPEG")
+                if count >= 200:
+                    count = 1
+                count+=1
 
         if self.out:
             self.out.release()
