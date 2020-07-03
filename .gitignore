@@ -2,11 +2,12 @@ video_original
 video_frames
 venv
 tfe
+faceNet
 output
 FERG_DB_256
 emotions
 emotions_5
-emotion_5_test
+emotions_5_test
 emotions_copy_test_dir
 img_test
 jaffedbase
@@ -22,14 +23,13 @@ emotion_model_v1.0_3cnn_2dns_input64x64.model
 fer2013.csv
 background.png
 
-
 origin
 build
 dist
 *.exe
 *.spec
 ISAFE MAIN DATABASE FOR PUBLIC
-faceNet
+
 
 
 
