@@ -1,11 +1,10 @@
 import sys
 from os.path import basename
 from PyQt5.QtCore import QPoint, Qt, QRect
-from PyQt5.QtWidgets import QAction, QMainWindow, QApplication, QPushButton, QMenu, QFileDialog
+from PyQt5.QtWidgets import QAction, QMainWindow, QApplication, QPushButton, QMenu, QFileDialog, QWidget, QFrame, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QHBoxLayout, QPushButton
 
 class Box(QtWidgets.QWidget):
     title = "box"
@@ -19,7 +18,6 @@ class Box(QtWidgets.QWidget):
         self.title = Box.title
         start_position = (self.x, self.y, self.w, self.h)
 
-
         # self.toolbar = self.addToolBar('Exit')
 
         self.setGeometry(*start_position)
@@ -29,15 +27,9 @@ class Box(QtWidgets.QWidget):
 
         tb = QtWidgets.QToolBar
 
-
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
 
         layout = QtWidgets.QHBoxLayout(self)
-
-        # layout.addWidget(QtWidgets.QPushButton("TEST"))
-
-
-        # self.setWindowFlags()
 
         self.setAttribute(Qt.WA_TranslucentBackground)
         frame =QFrame(self)
@@ -49,9 +41,3 @@ class Box(QtWidgets.QWidget):
     
     def close_window(self):
         self.close()
-
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     mainMenu = Box()
-#     sys.exit(app.exec_())

@@ -4,8 +4,8 @@ from PyQt5.QtCore import QPoint, Qt, QRect
 from PyQt5.QtWidgets import QAction, QMainWindow, QApplication, QPushButton, QMenu, QFileDialog
 from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 
-import grab_image
-import box
+import faceNet_draw_image
+import faceNet_box
 import emotion_detect_5_in_gui
 
 class Menu(QMainWindow):
@@ -48,14 +48,12 @@ class Menu(QMainWindow):
         self.toolbar.addAction(close_box)
         self.toolbar.addAction(run_program)
 
-
-        self.snippingTool = grab_image.SnippingWidget(self)
+        self.snippingTool = faceNet_draw_image.SnippingWidget(self)
         self.setGeometry(*start_position)
 
         # From the second initialization, both arguments will be valid
         
         self.image = QPixmap("background.PNG")
-
 
         self.show()
 
@@ -64,7 +62,7 @@ class Menu(QMainWindow):
     
     def create_box(self, x,y,w,h):
         # if not Menu.face_chosen:
-        Menu.face_box = box.Box(x,y,w,h)
+        Menu.face_box = faceNet_box.Box(x,y,w,h)
         self.box_x = x
         self.box_y = y
         self.box_w = w
