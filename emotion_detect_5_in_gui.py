@@ -22,7 +22,7 @@ import PIL
 import tensorflow as tf
 import numpy as np
 
-def main(x,y,w,h):
+def main(x,y,w,h, running):
     debug = True
     begin_session_allocate_memory()
     model = tf.keras.models.load_model("faceNet\\xNet_noreg_v2_7202_best")
@@ -35,7 +35,7 @@ def main(x,y,w,h):
         screen_size = (width, height)
         out = cv2.VideoWriter(path+"video\\output.avi", fourcc, 20.0, (screen_size))
     
-    classifier = Faces(width, height, model, path, out, x,y,w,h)
+    classifier = Faces(width, height, model, path, out, x,y,w,h, running)
     try:
         classifier.find_face()
     except KeyboardInterrupt:
@@ -46,7 +46,7 @@ def main(x,y,w,h):
         print("Ending session")
 
 class Faces:
-    def __init__(self, width, height, model, path, out, x,y,w,h):
+    def __init__(self, width, height, model, path, out, x,y,w,h, running):
         self.width = width
         self.height = height
         self.model = model
@@ -56,14 +56,13 @@ class Faces:
         self.y = y
         self.w = w
         self.h = h
-        self.face_detected = False  
-        
+        self.running = running
+        self.face_detected = False
     
     def find_face(self):
         count = 1
-        while True:
+        while self.running:
             try:
-                # img = pyautogui.screenshot()
                 img = PIL.ImageGrab.grab(bbox=(self.x,self.y,self.w,self.h))
             except OSError:
                 continue

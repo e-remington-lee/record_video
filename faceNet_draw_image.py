@@ -82,7 +82,7 @@ class SnippingWidget(QtWidgets.QWidget):
         QtWidgets.QApplication.processEvents()
         img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
         QtWidgets.QApplication.processEvents()
-        self.parent.create_box(x1, y1, x2, y2)
+        self.parent._Menu__create_box(x1, y1, x2, y2)
         self.close()
         
 

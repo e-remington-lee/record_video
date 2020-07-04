@@ -1,4 +1,6 @@
 import sys
+import threading
+
 from os.path import basename
 from PyQt5.QtCore import QPoint, Qt, QRect
 from PyQt5.QtWidgets import QAction, QMainWindow, QApplication, QPushButton, QMenu, QFileDialog
@@ -6,17 +8,16 @@ from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 
 import faceNet_draw_image
 import faceNet_box
-import emotion_detect_5_in_gui
+from faceNet_5 import FaceReader
 
 class Menu(QMainWindow):
     default_title = "FaceNet"
-    # face_chosen = False
     face_box = None
+    face_reader = None
 
     # numpy_image is the desired image we want to display given as a numpy array.
     def __init__(self, numpy_image=None, opacity=1, start_position=(300, 300, 350, 250)):
         super().__init__()
-
         self.opacity = opacity
         self.drawing = False
         self.brushSize = 1
@@ -35,18 +36,22 @@ class Menu(QMainWindow):
         new_snip_action = QAction("Draw Box", self)
         new_snip_action.setShortcut('Ctrl+N')
         new_snip_action.setStatusTip('Snip!')
-        new_snip_action.triggered.connect(self.new_image_window)
+        new_snip_action.triggered.connect(self.__new_image_window)
 
         close_box = QAction('Close Box', self)
-        close_box.triggered.connect(self.close_box)
+        close_box.triggered.connect(self.__close_box)
 
         run_program = QAction('start program', self)
-        run_program.triggered.connect(self.start_program)
+        run_program.triggered.connect(self.__start_program)
+
+        stop_program = QAction('stop program', self)
+        stop_program.triggered.connect(self.__stop_program)
 
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(new_snip_action)
         self.toolbar.addAction(close_box)
         self.toolbar.addAction(run_program)
+        self.toolbar.addAction(stop_program)
 
         self.snippingTool = faceNet_draw_image.SnippingWidget(self)
         self.setGeometry(*start_position)
@@ -57,10 +62,10 @@ class Menu(QMainWindow):
 
         self.show()
 
-    def new_image_window(self):
+    def __new_image_window(self):
         self.snippingTool.start()
     
-    def create_box(self, x,y,w,h):
+    def __create_box(self, x,y,w,h):
         # if not Menu.face_chosen:
         Menu.face_box = faceNet_box.Box(x,y,w,h)
         self.box_x = x
@@ -72,12 +77,23 @@ class Menu(QMainWindow):
         #     Menu.face_box.close()
         #     Menu.face_box = box.Box(x,y,w,h)
 
-    def start_program(self):
+    def __start_program(self):
         if self.box_drawn_can_start:
-            emotion_detect_5_in_gui.main(self.box_x,self.box_y,self.box_w,self.box_h)
+            if not Menu.face_reader:
+                Menu.face_reader = FaceReader(self.box_x,self.box_y,self.box_w,self.box_h)
+            # Menu.face_reader.start()
+            Menu.face_reader.run()
 
-    def close_box(self):
+    def __stop_program(self):
+        pass
+        # if Menu.face_reader:
+        #     Menu.face_reader.stop_faceReader()
+
+    def __close_box(self):
         if Menu.face_box:
+            if Menu.face_reader:
+                pass
+                # Menu.face_reader.stop_faceReader()
             Menu.face_box.close_window()
             self.box_drawn_can_start = False
 
