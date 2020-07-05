@@ -14,7 +14,7 @@
 
 
 import os
-import threading
+import multiprocessing
 
 import cv2.cv2 as cv2
 import PIL
@@ -29,12 +29,12 @@ import numpy as np
 #         tf.keras.backend.clear_session()
 #         print("Ending session")
 
-class FaceReader():
+class FaceReader(multiprocessing.Process):
     debug = True
     running = False
     def __init__(self, x,y,w,h):
-        threading.Thread.__init__(self)
-        # self.begin_session_allocate_memory()
+        super().__init__()
+        self.begin_session_allocate_memory()
         self.model = tf.keras.models.load_model("faceNet\\xNet_noreg_v2_7202_best")
         self.path = "output\\"
         self.x = x
@@ -64,12 +64,13 @@ class FaceReader():
                     if count >= 200:
                         count = 1
                     count+=1
-            cv2.destroyAllWindows()  
-
+            cv2.destroyAllWindows()
         except KeyboardInterrupt:
             cv2.destroyAllWindows()  
             tf.keras.backend.clear_session()
             print("Ending session")
+        
+        return None
 
     def predict(self, face):
         size = 64
@@ -113,34 +114,7 @@ class FaceReader():
             except RuntimeError as e:
                 print(e)
 
-def predict(model, image):
-    size = 64
-    # this line causes errors sometimes, unsure
-    final_image = cv2.resize(image, (size,size))
-    # final_image = tf.reshape(face, (size, size))
-    
-    final_image = np.expand_dims(final_image, 0)
-    acc = model.predict([final_image])
-    output = ""
-    result = acc[0]
 
-    if result[0] > 0.5:
-        output += "anger_disgust"
-    if result[1] > 0.5:
-        output += "joy"
-    if result[2] > 0.5:
-        output += "neutral" 
-    if result[3] > 0.5:
-        output += "sadness"
-    if result[4] > 0.5:
-        output += "surprise_fear"
-    if output == "":
-        output = "No result"
-
-    return output
-
-def stop_faceReader():
-    FaceReader.running = False
 
 
 # FaceReader(10,10,50,50).find_face()

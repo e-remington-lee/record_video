@@ -30,8 +30,6 @@ class SnippingWidget(QtWidgets.QWidget):
         SnippingWidget.is_snipping = True
         self.setWindowOpacity(0.2)
         QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.CrossCursor))
-        print('Capture the screen...')
-        print('Press q if you want to quit...')
         self.show()
 
     def paintEvent(self, event):
@@ -54,11 +52,11 @@ class SnippingWidget(QtWidgets.QWidget):
         rect = QtCore.QRectF(self.begin, self.end)
         qp.drawRect(rect)
 
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Q:
-            print('Quit')
-            self.close()
-        event.accept()
+    # def keyPressEvent(self, event):
+    #     if event.key() == QtCore.Qt.Key_Q:
+    #         print('Quit')
+    #         self.close()
+    #     event.accept()
 
     def mousePressEvent(self, event):
         self.begin = event.pos()

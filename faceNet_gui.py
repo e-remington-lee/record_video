@@ -1,5 +1,6 @@
 import sys
 import threading
+import multiprocessing
 
 from os.path import basename
 from PyQt5.QtCore import QPoint, Qt, QRect
@@ -8,6 +9,7 @@ from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 
 import faceNet_draw_image
 import faceNet_box
+# from faceNet_5 import FaceReader
 from faceNet_5 import FaceReader
 
 class Menu(QMainWindow):
@@ -25,7 +27,7 @@ class Menu(QMainWindow):
         self.lastPoint = QPoint()
         self.total_snips = 0
         self.title = Menu.default_title
-
+        self.model_running = False
         self.box_x = None
         self.box_y = None
         self.box_w = None
@@ -78,22 +80,26 @@ class Menu(QMainWindow):
         #     Menu.face_box = box.Box(x,y,w,h)
 
     def __start_program(self):
-        if self.box_drawn_can_start:
-            if not Menu.face_reader:
-                Menu.face_reader = FaceReader(self.box_x,self.box_y,self.box_w,self.box_h)
-            # Menu.face_reader.start()
-            Menu.face_reader.run()
+        if self.box_drawn_can_start and not self.model_running:
+            self.model_running = True
+            Menu.face_reader = FaceReader(self.box_x,self.box_y,self.box_w,self.box_h)
+            # https://stackoverflow.com/questions/10415028/how-can-i-recover-the-return-value-of-a-function-passed-to-multiprocessing-proce
+            # Menu.face_reader = multiprocessing.Process(target=FaceReader, args=(self.box_x,self.box_y,self.box_w,self.box_h))
+            Menu.face_reader.start()
+        else:
+            print("---Cannot start program, box not drawn or model is running---")
 
     def __stop_program(self):
-        pass
-        # if Menu.face_reader:
-        #     Menu.face_reader.stop_faceReader()
+        if Menu.face_reader:
+            self.model_running = False
+            Menu.face_reader.terminate()
+            print("---closing model---")
 
     def __close_box(self):
         if Menu.face_box:
             if Menu.face_reader:
-                pass
-                # Menu.face_reader.stop_faceReader()
+                self.__stop_program()
+                print("---closing model---")
             Menu.face_box.close_window()
             self.box_drawn_can_start = False
 
