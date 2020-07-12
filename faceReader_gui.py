@@ -95,7 +95,6 @@ class Menu(QMainWindow):
         self.snippingTool.start()
     
     def __create_box(self, x,y,w,h):
-        
         Menu.face_box = faceReader_box.Box(x,y,w,h)
         self.box_x = x
         self.box_y = y
@@ -110,7 +109,6 @@ class Menu(QMainWindow):
             self.face_model_process.start()
             self.model_running = True
             self.inputs_queue.put("start")
-
         elif not self.box_drawn_can_start:
             print("---Cannot start program, box not drawn---")
         else:
@@ -133,7 +131,6 @@ class Menu(QMainWindow):
             Menu.face_box.close_window()
             self.box_drawn_can_start = False
             print("---closing box---")
-    
 
     def paintEvent(self, event):
         painter = QPainter(self)
