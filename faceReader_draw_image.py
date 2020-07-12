@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from PIL import ImageGrab
 from PyQt5 import QtWidgets, QtCore, QtGui
-import faceNet_gui
+import faceReader_gui
 from PyQt5.QtCore import Qt
 
 

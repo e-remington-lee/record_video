@@ -17,66 +17,55 @@ import os
 import multiprocessing
 
 import cv2.cv2 as cv2
-import PIL
+from PIL import ImageGrab, Image
 import tensorflow as tf
 import numpy as np
 
-# def main(x,y,w,h, running):
-#     try:
-#         classifier.find_face()
-#     except KeyboardInterrupt:
-#         cv2.destroyAllWindows()  
-#         tf.keras.backend.clear_session()
-#         print("Ending session")
-
-class FaceReader(multiprocessing.Process):
+class FaceReader():
     debug = True
     running = False
-    def __init__(self, x,y,w,h):
-        super().__init__()
+    def __init__(self, x,y,w,h, outputs_queue):
+        # super(FaceReader, self).__init__()
         self.begin_session_allocate_memory()
-        self.model = tf.keras.models.load_model("faceNet\\xNet_noreg_v2_7202_best")
+        self.model = tf.keras.models.load_model("faceNet\\xNet_v2_7390_48x48")
         self.path = "output\\"
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.outputs_queue = outputs_queue
          
     def run(self):
         try: 
             count = 1
-            FaceReader.running = True
-            while FaceReader.running:
-                try:
-                    img = PIL.ImageGrab.grab(bbox=(self.x,self.y,self.w,self.h))
-                except OSError:
-                    continue
+            try:
+                img = ImageGrab.grab(bbox=(self.x,self.y,self.w,self.h))
+            except OSError:
+                pass
 
-                img = np.array(img)
+            img = np.array(img)
 
-                prediction = self.predict(img)
-                print(prediction)
-                
-                if FaceReader.debug:
-                    txt = prediction+"_predicted"+str(count)+".jpg"
-                    im = PIL.Image.fromarray(img)
-                    im.save(self.path+txt, "JPEG")
-                    if count >= 200:
-                        count = 1
-                    count+=1
+            prediction = self.predict(img)
+            r_message = (prediction,)
+            self.outputs_queue.put(r_message)
+            # print(prediction)
+            
+            if FaceReader.debug:
+                txt = prediction+"_predicted"+str(count)+".jpg"
+                im = Image.fromarray(img)
+                im.save(self.path+txt, "JPEG")
+                if count >= 400:
+                    count = 1
+                count+=1
             cv2.destroyAllWindows()
         except KeyboardInterrupt:
             cv2.destroyAllWindows()  
             tf.keras.backend.clear_session()
             print("Ending session")
-        
-        return None
 
     def predict(self, face):
-        size = 64
-        # this line causes errors sometimes, unsure
+        size = 48
         final_image = cv2.resize(face, (size,size))
-        # final_image = tf.reshape(face, (size, size))
       
         final_image = np.expand_dims(final_image, 0)
         acc = self.model.predict([final_image])
@@ -97,10 +86,6 @@ class FaceReader(multiprocessing.Process):
             output = "No result"
 
         return output
-
-    @staticmethod
-    def stop_faceReader():
-        FaceReader.running = False
     
     @staticmethod
     def begin_session_allocate_memory():
@@ -114,7 +99,3 @@ class FaceReader(multiprocessing.Process):
             except RuntimeError as e:
                 print(e)
 
-
-
-
-# FaceReader(10,10,50,50).find_face()

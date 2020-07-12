@@ -32,6 +32,7 @@ dist
 *.exe
 *.spec
 ISAFE MAIN DATABASE FOR PUBLIC
+ISAFE_removed_bad_images
 faceNet
 
 
