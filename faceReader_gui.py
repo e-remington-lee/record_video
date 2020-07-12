@@ -9,7 +9,7 @@ from PyQt5.QtGui import QPixmap, QImage, QPainter, QPen
 
 import faceReader_draw_image
 import faceReader_box
-from real_model import FaceReader
+from faceReader_model import FaceReader
 
 def model_worker(inputs_queue, outputs_queue,x,y,w,h):
     while True:
