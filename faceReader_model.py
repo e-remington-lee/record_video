@@ -38,17 +38,18 @@ class FaceReader():
     def run(self):
         try: 
             count = 1
+            # redesign so there is another function that does the image grab and passes those locations back to model
+            # image will only find location of face once every 10/20 to speed up performance
             try:
                 img = ImageGrab.grab(bbox=(self.x,self.y,self.w,self.h))
             except OSError:
                 pass
 
             img = np.array(img)
-
+            # perform 10-crop validation? basically take the image we get from the haar-cascade, 
             prediction = self.predict(img)
             r_message = (prediction,)
             self.outputs_queue.put(r_message)
-            # print(prediction)
             
             if FaceReader.debug:
                 txt = prediction+"_predicted"+str(count)+".jpg"
