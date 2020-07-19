@@ -46,6 +46,12 @@ class FaceReader():
                 pass
 
             img = np.array(img)
+            if FaceReader.debug:
+                im = Image.fromarray(img)
+            
+            # must rescale image for the model
+            img = img * 1.0/255
+            
             # perform 10-crop validation? basically take the image we get from the haar-cascade, 
             prediction = self.predict(img)
             r_message = (prediction,)
@@ -53,7 +59,7 @@ class FaceReader():
             
             if FaceReader.debug:
                 txt = prediction+"_predicted"+str(count)+".jpg"
-                im = Image.fromarray(img)
+                # im = Image.fromarray(img)
                 im.save(self.path+txt, "JPEG")
                 if count >= 400:
                     count = 1
