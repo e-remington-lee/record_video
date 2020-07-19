@@ -47,16 +47,15 @@ class FaceReader():
 
             img = np.array(img)
             face = self.front_face_cascade.detectMultiScale(img, 1.1, 5, minSize=(30,30))
-            if len(face) > 0:
-                if FaceReader.debug:
-                    im = Image.fromarray(img)
-                
+            if len(face) > 0:                
                 # crop face
                 for (x,y,w,h) in face:
                     cropped_face = img[y:y+h, x:x+w]
                     # must rescale image for the model
                     # img = img * 1.0/255
                     cropped_face = np.array(cropped_face)
+                    if FaceReader.debug:
+                        im = Image.fromarray(cropped_face)
                     cropped_face = cropped_face * 1.0/255
                     # perform 10-crop validation? basically take the image we get from the haar-cascade,
                     
