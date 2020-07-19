@@ -10,3 +10,7 @@ for x in li:
         success,image = vidcap.read()
         print('Read a new frame: ', success)
         count += 1
+
+
+
+# print(multiprocessing.cpu_count())
