@@ -22,6 +22,7 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 break
             elif message == "start":
                 model = FaceReader(x,y,w,h, outputs_queue)
+                count = 0
                 while True:
                     if not inputs_queue.empty():
                         message = inputs_queue.get()
@@ -30,7 +31,10 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                             print(f'stopping')
                             break
                     else:
-                        model.run()
+                        model.run(count)
+                        count += 1 
+                        if count > 200:
+                            count = 0
 
 class Menu(QMainWindow):
     default_title = "FaceNet"
