@@ -21,6 +21,7 @@ emotion_model_generated_faces.model
 emotion_model_v1.0_realfaces.model
 emotion_model_v1.0_3cnn_2dns_input64x64.model
 fer2013.csv
+place_holder.jpg
 background.png
 tflite_model
 origin

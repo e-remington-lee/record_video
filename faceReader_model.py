@@ -64,7 +64,7 @@ class FaceReader():
                     self.outputs_queue.put(r_message)
                     
                     if FaceReader.debug:
-                        txt = prediction+"_predicted"+str(count)+".jpg"
+                        txt = str(prediction)+"_predicted"+str(count)+".jpg"
                         # im = Image.fromarray(img)
                         im.save(self.path+txt, "JPEG")
             # Do I need this every loop?
@@ -80,25 +80,24 @@ class FaceReader():
       
         final_image = np.expand_dims(final_image, 0)
         acc = self.model.predict([final_image])
-        output = ""
+        # output = ""
         result = acc[0]
-        # print(result)
-        if result[0] > 0.3:
-            output += "anger_disgust" 
-        if result[1] > 0.3:
-            output += "joy"
-        if result[2] > 0.3:
-            output += "neutral" 
-        if result[3] > 0.3:
-            output += "sadness"
-        if result[4] > 0.3:
-            output += "surprise_fear"
-        if output == "":
-            output = "No result"
+        # if result[0] > 0.3:
+        #     output += "anger_disgust" 
+        # if result[1] > 0.3:
+        #     output += "joy"
+        # if result[2] > 0.3:
+        #     output += "neutral" 
+        # if result[3] > 0.3:
+        #     output += "sadness"
+        # if result[4] > 0.3:
+        #     output += "surprise_fear"
+        # if output == "":
+        #     output = "No result"
 
-        r = str(result)
+        # r = str(result)
         
-        return output+r
+        return result
     
     @staticmethod
     def begin_session_allocate_memory():
