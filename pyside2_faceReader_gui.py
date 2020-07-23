@@ -10,11 +10,11 @@ from PySide2.QtWidgets import QAction, QMainWindow, QApplication, QPushButton, Q
 from PySide2.QtGui import QPixmap, QImage, QPainter, QPen
 from PySide2.QtCharts import QtCharts
 
-
-
 import pyside2_faceReader_draw_image
 import pyside2_faceReader_box
-from faceReader_model import FaceReader
+from pyside2_faceReader_model import FaceReader
+
+from random import random
 
 def model_worker(inputs_queue, outputs_queue,x,y,w,h):
     while True:
@@ -26,7 +26,7 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 print(f'stopping')
                 break
             elif message == "start":
-                model = FaceReader(x,y,w,h, outputs_queue)
+                model = FaceReader(outputs_queue)
                 count = 0
                 while True:
                     if not inputs_queue.empty():
@@ -36,7 +36,7 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                             print(f'stopping')
                             break
                     else:
-                        model.run(count)
+                        model.run(x,y,w,h, count)
                         count += 1 
                         if count > 200:
                             count = 0
@@ -81,12 +81,16 @@ class Menu(QMainWindow):
         self._timer.start()
 
         self._graph_timer = None
-        
 
         self.face_model_process = None
 
         self.inputs_queue = Queue()
         self.outputs_queue = Queue()
+
+        self._graph_timer = QTimer()
+        self._graph_timer.setInterval(1000)
+        self._graph_timer.timeout.connect(self.create_graph)
+        self._graph_timer.start()
         
         # New snip
         new_snip_action = QAction("Draw Box", self)
@@ -110,19 +114,42 @@ class Menu(QMainWindow):
         self.snippingTool = pyside2_faceReader_draw_image.SnippingWidget(self)
         self.setGeometry(*start_position)
 
-        # From the second initialization, both arguments will be valid
-        
-        self.image = QPixmap("background.PNG")
-
+        # From the second initialization, both arguments will be valid 
+        # self.image = QPixmap("background.PNG")
         self.show()
 
     def create_graph(self):
         self.emotion_set = QtCharts.QBarSet('Confidence Level')
 
-        self.emotion_set.append([self.face_anger_digust, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
+        # self.emotion_set.append([0, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
+        # r1 = random()
+        # r2 = random()
+        # r3 = random()
+        # r4 = random()
+        # r5 = random()
 
+        # self.face_anger_digust = r1
+        # self.face_happy = r2
+        # self.face_neutral = r3
+        # self.face_sadness = r4
+        # self.face_surprise_fear = r5
+
+        new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
+        print(str(new_graph_value))
+
+        self.face_anger_digust = new_graph_value[0][0]
+        self.face_happy = new_graph_value[0][1]
+        self.face_neutral = new_graph_value[0][2]
+        self.face_sadness = new_graph_value[0][3]
+        self.face_surprise_fear = new_graph_value[0][4]
+
+        self.emotion_set.append([self.face_anger_digust, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
         series = QtCharts.QHorizontalBarSeries()
+
         series.append(self.emotion_set)
+
+        self.face_confidence_level = numpy.zeros((1,5))
+        self.face_confidence_entry_count = 0
 
         chart = QtCharts.QChart()
         chart.addSeries(series)
@@ -130,10 +157,10 @@ class Menu(QMainWindow):
 
         # chart.setAnimationOptions(QtCharts.SeriesAnimations)
 
-        months = ('Angery and Disgusted', 'Happy', 'Neutral', 'Sadness', 'Fear and Surprise')
+        emotions = ('Angery and Disgusted', 'Happy', 'Neutral', 'Sadness', 'Fear and Surprise')
 
         axisY = QtCharts.QBarCategoryAxis()
-        axisY.append(months)
+        axisY.append(emotions)
         chart.addAxis(axisY, Qt.AlignLeft)
         series.attachAxis(axisY)
 
@@ -166,10 +193,10 @@ class Menu(QMainWindow):
 
     def __start_program(self):
         if self.box_drawn_can_start and not self.model_running:
-            self._graph_timer = QTimer()
-            self._graph_timer.setInterval(1000)
-            self._graph_timer.timeout.connect(self.__graph)
-            self._graph_timer.start()
+            # self._graph_timer = QTimer()
+            # self._graph_timer.setInterval(1000)
+            # self._graph_timer.timeout.connect(self.__graph)
+            # self._graph_timer.start()
 
             self.face_model_process = Process(target=model_worker, args=(self.inputs_queue, self.outputs_queue, 
                                             self.box_x, self.box_y, self.box_w, self.box_h))
@@ -208,27 +235,44 @@ class Menu(QMainWindow):
 
     def __graph(self):
         self.face_lock.acquire()
+        print("updating graph...")
+        r1 = random()
+        r2 = random()
+        r3 = random()
+        r4 = random()
+        r5 = random()
 
-        new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
-        print(str(new_graph_value))
-
-        self.face_anger_digust = new_graph_value[0][0]
-        self.face_happy = new_graph_value[0][1]
-        self.face_neutral = new_graph_value[0][2]
-        self.face_sadness = new_graph_value[0][3]
-        self.face_surprise_fear = new_graph_value[0][4]
+        self.face_anger_digust = r1
+        self.face_happy = r2
+        self.face_neutral = r3
+        self.face_sadness = r4
+        self.face_surprise_fear = r5
 
         self.emotion_set.append([self.face_anger_digust, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
 
-        self.face_confidence_level = numpy.zeros((1,5))
-        self.face_confidence_entry_count = 0
+        # self.face_confidence_level = numpy.zeros((1,5))
+        # self.face_confidence_entry_count = 0
+
+        # new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
+        # print(str(new_graph_value))
+
+        # self.face_anger_digust = new_graph_value[0][0]
+        # self.face_happy = new_graph_value[0][1]
+        # self.face_neutral = new_graph_value[0][2]
+        # self.face_sadness = new_graph_value[0][3]
+        # self.face_surprise_fear = new_graph_value[0][4]
+
+        # self.emotion_set.append([self.face_anger_digust, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
+
+        # self.face_confidence_level = numpy.zeros((1,5))
+        # self.face_confidence_entry_count = 0
         self.face_lock.release()
         
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        rect = QRect(0,  self.toolbar.height(), self.image.width(), self.image.height())
-        painter.drawPixmap(rect, self.image)
+    # def paintEvent(self, event):
+    #     painter = QPainter(self)
+    #     rect = QRect(0,  self.toolbar.height(), self.image.width(), self.image.height())
+    #     painter.drawPixmap(rect, self.image)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:

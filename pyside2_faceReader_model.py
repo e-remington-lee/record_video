@@ -24,24 +24,20 @@ import numpy as np
 class FaceReader():
     debug = True
     running = False
-    def __init__(self, x,y,w,h, outputs_queue):
+    def __init__(self, outputs_queue):
         # super(FaceReader, self).__init__()
         self.begin_session_allocate_memory()
-        self.model = tf.keras.models.load_model("faceNet\\xNet_v2_7390_48x48")
+        self.model = tf.keras.models.load_model("faceNet\\xNet_v3.2.0_SGD_128x128_8028_8063")
         self.path = "output\\"
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
         self.outputs_queue = outputs_queue
         self.front_face_cascade = cv2.CascadeClassifier("cascades\\haarcascade_frontalface_default.xml")
          
-    def run(self, count):
+    def run(self, x,y,w,h, count):
         try: 
             # redesign so there is another function that does the image grab and passes those locations back to model
             # image will only find location of face once every 10/20 to speed up performance
             try:
-                img = ImageGrab.grab(bbox=(self.x,self.y,self.w,self.h))
+                img = ImageGrab.grab(bbox=(x,y,w,h))
             except OSError:
                 pass
 
@@ -65,8 +61,14 @@ class FaceReader():
                     
                     if FaceReader.debug:
                         txt = str(prediction)+"_predicted"+str(count)+".jpg"
-                        # im = Image.fromarray(img)
                         im.save(self.path+txt, "JPEG")
+            else:
+                if FaceReader.debug:
+                    txt = f"No Face_{str(count)}+.jpg"
+                    no_face = Image.fromarray(img)
+                    no_face.save(self.path+txt, "JPEG")
+
+
             # Do I need this every loop?
             cv2.destroyAllWindows()
         except KeyboardInterrupt:
@@ -75,7 +77,7 @@ class FaceReader():
             print("Ending session")
 
     def predict(self, face):
-        size = 48
+        size = 128
         final_image = cv2.resize(face, (size,size))
       
         final_image = np.expand_dims(final_image, 0)

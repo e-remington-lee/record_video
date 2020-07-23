@@ -52,12 +52,6 @@ class SnippingWidget(QtWidgets.QWidget):
         rect = QtCore.QRectF(self.begin, self.end)
         qp.drawRect(rect)
 
-    # def keyPressEvent(self, event):
-    #     if event.key() == QtCore.Qt.Key_Q:
-    #         print('Quit')
-    #         self.close()
-    #     event.accept()
-
     def mousePressEvent(self, event):
         self.begin = event.pos()
         self.end = self.begin

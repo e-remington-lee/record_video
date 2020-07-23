@@ -8,7 +8,6 @@ from PySide2 import QtWidgets, QtCore, QtGui
 
 class Box(QWidget):
     title = "box"
-    # numpy_image is the desired image we want to display given as a numpy array.
     def __init__(self, x,y,w,h):
         QWidget.__init__(self)
         self.x = x
@@ -18,7 +17,6 @@ class Box(QWidget):
         self.title = Box.title
         start_position = (self.x, self.y, self.w, self.h)
 
-        # self.toolbar = self.addToolBar('Exit')
 
         self.setGeometry(*start_position)
         width = self.w - self.x
