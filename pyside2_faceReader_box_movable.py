@@ -79,13 +79,28 @@ class Grabber(QWidget):
         # get the grabWidget geometry and remap it to global coordinates
         grabGeometry = self.grabWidget.geometry()
         grabGeometry.moveTopLeft(self.grabWidget.mapToGlobal(QPoint(0, 0)))
+        
+        #Sends info to the input queue
+        x1 = grabGeometry.getRect()[0]
+        y1 = grabGeometry.getRect()[1]
+        width = grabGeometry.getRect()[2]
+        height = grabGeometry.getRect()[3]
+        
+        message = f"UPDATE {x1} {y1} {width} {height}" 
+        self.inputs_queue.put(message)
+
+        # if not self.inputs_queue.empty():
+        #         message = self.inputs_queue.get()
+        #         if "UPDATE" in message:
+        #             x = message.split(" ")
+        #             print(x)      
 
         # get the actual margins between the grabWidget and the window margins
         left = frameRect.left() - grabGeometry.left()
         top = frameRect.top() - grabGeometry.top()
         right = frameRect.right() - grabGeometry.right()
         bottom = frameRect.bottom() - grabGeometry.bottom()
-        print(self.grabWidget.pos())
+        
 
         # reset the geometries to get "0-point" rectangles for the mask
         frameRect.moveTopLeft(QPoint(0, 0))
@@ -98,6 +113,8 @@ class Grabber(QWidget):
         # the window titlebar, margins and panel
         region -= QRegion(grabGeometry)
         self.setMask(region)
+
+        
 
         # update the grab size according to grabWidget geometry
         self.widthLabel.setText(str(self.grabWidget.width()))
@@ -134,6 +151,7 @@ class Grabber(QWidget):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    grabber = Grabber(1000, 600, 300, 400, 10)
+    queue = Queue()
+    grabber = Grabber(1000, 600, 300, 400, queue)
     # grabber.show()
     sys.exit(app.exec_())

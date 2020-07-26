@@ -50,18 +50,17 @@ class FaceReader():
                 # crop face
                 for (x,y,w,h) in face:
                     cropped_face = img[y:y+h, x:x+w]
-                    # must rescale image for the model
-                    # img = img * 1.0/255
                     cropped_face = np.array(cropped_face)
+
                     if FaceReader.debug:
                         im = Image.fromarray(cropped_face)
+
                     cropped_face = cropped_face * 1.0/255
-                    # perform 10-crop validation? basically take the image we get from the haar-cascade,
-                    
+                    # perform 10-crop validation?                    
                     prediction = self.predict(cropped_face)
                     r_message = (prediction,)
                     self.outputs_queue.put(r_message)
-                    
+
                     if FaceReader.debug:
                         txt = self.emo+str(prediction)+"_predicted"+str(count)+".jpg"
                         im.save(self.path+txt, "JPEG")
@@ -70,8 +69,6 @@ class FaceReader():
                     txt = f"No Face_{str(count)}+.jpg"
                     no_face = Image.fromarray(img)
                     no_face.save(self.path+txt, "JPEG")
-
-
             # Do I need this every loop?
             cv2.destroyAllWindows()
         except KeyboardInterrupt:

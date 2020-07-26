@@ -82,8 +82,7 @@ class SnippingWidget(QtWidgets.QWidget):
         y2 = max(self.y11, self.y22)
 
 
-        print(self.x11, self.x22, self.y11, self.y22)
-        print(x1,x2,y1,y2)
+        print(self.x11, self.y11, self.x22, self.y22)
         self.repaint()
         QtWidgets.QApplication.processEvents()
         # QtWidgets.QApplication.processEvents()

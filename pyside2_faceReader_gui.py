@@ -28,20 +28,27 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
             elif message == "start":
                 model = FaceReader(outputs_queue)
                 count = 0
-                # redefine xywh here so we can update them from the queue
+                x1 = x
+                y1 = y
+                width = w
+                height = h
                 while True:
                     if not inputs_queue.empty():
                         message = inputs_queue.get()
                         print(f'message:', message)
-                        if message == 'STOP':
+                        if "UPDATE" in message:
+                            new_cords = message.split(" ")
+                            x1 = int(new_cords[1])
+                            y1 = int(new_cords[2])
+                            width = x1+int(new_cords[3])
+                            height = y1+int(new_cords[4])
+                        elif message == 'STOP':
                             print(f'stopping')
                             break
-                        if "UPDATE" in message:
-                            pass
                         else:
                             continue
                     else:
-                        model.run(x,y,w,h, count)
+                        model.run(x1, y1, width, height, count)
                         count += 1 
                         if count > 200:
                             count = 0
