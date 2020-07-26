@@ -6,9 +6,10 @@ from PySide2 import QtWidgets, QtCore, QtGui
 import faceReader_gui
 from PySide2.QtCore import Qt
 
+# Testing
+import pyautogui
 
 class SnippingWidget(QtWidgets.QWidget):
-    num_snip = 0
     is_snipping = False
     background = True
 
@@ -23,6 +24,10 @@ class SnippingWidget(QtWidgets.QWidget):
         self.setGeometry(0, 0, screen_width, screen_height)
         self.begin = QtCore.QPoint()
         self.end = QtCore.QPoint()
+        self.x11 = None
+        self.y11 = None
+        self.x22 = None
+        self.y22 = None
 
     def start(self):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -56,24 +61,32 @@ class SnippingWidget(QtWidgets.QWidget):
         self.begin = event.pos()
         self.end = self.begin
         self.update()
+        self.x11, self.y11 = pyautogui.position()
+        # print(pyautogui.position())
 
     def mouseMoveEvent(self, event):
         self.end = event.pos()
         self.update()
+        self.x22, self.y22 = pyautogui.position()
 
     def mouseReleaseEvent(self, event):
-        SnippingWidget.num_snip += 1
         SnippingWidget.is_snipping = False
         QtWidgets.QApplication.restoreOverrideCursor()
-        x1 = min(self.begin.x(), self.end.x())
-        y1 = min(self.begin.y(), self.end.y())
-        x2 = max(self.begin.x(), self.end.x())
-        y2 = max(self.begin.y(), self.end.y())
+        # x1 = min(self.begin.x(), self.end.x())
+        # y1 = min(self.begin.y(), self.end.y())
+        # x2 = max(self.begin.x(), self.end.x())
+        # y2 = max(self.begin.y(), self.end.y())
+        x1 = min(self.x11, self.x22)
+        y1 = min(self.y11, self.y22)
+        x2 = max(self.x11, self.x22)
+        y2 = max(self.y11, self.y22)
 
+
+        print(self.x11, self.x22, self.y11, self.y22)
+        print(x1,x2,y1,y2)
         self.repaint()
         QtWidgets.QApplication.processEvents()
-        img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
-        QtWidgets.QApplication.processEvents()
+        # QtWidgets.QApplication.processEvents()
         self.parent._Menu__create_box(x1, y1, x2, y2)
         self.close()
         

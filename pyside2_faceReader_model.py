@@ -21,9 +21,11 @@ from PIL import ImageGrab, Image
 import tensorflow as tf
 import numpy as np
 
+
 class FaceReader():
     debug = True
     running = False
+    
     def __init__(self, outputs_queue):
         # super(FaceReader, self).__init__()
         self.begin_session_allocate_memory()
@@ -31,7 +33,8 @@ class FaceReader():
         self.path = "output\\"
         self.outputs_queue = outputs_queue
         self.front_face_cascade = cv2.CascadeClassifier("cascades\\haarcascade_frontalface_default.xml")
-         
+        self.emo = ""
+
     def run(self, x,y,w,h, count):
         try: 
             # redesign so there is another function that does the image grab and passes those locations back to model
@@ -60,7 +63,7 @@ class FaceReader():
                     self.outputs_queue.put(r_message)
                     
                     if FaceReader.debug:
-                        txt = str(prediction)+"_predicted"+str(count)+".jpg"
+                        txt = self.emo+str(prediction)+"_predicted"+str(count)+".jpg"
                         im.save(self.path+txt, "JPEG")
             else:
                 if FaceReader.debug:
@@ -82,22 +85,21 @@ class FaceReader():
       
         final_image = np.expand_dims(final_image, 0)
         acc = self.model.predict([final_image])
-        # output = ""
         result = acc[0]
-        # if result[0] > 0.3:
-        #     output += "anger_disgust" 
-        # if result[1] > 0.3:
-        #     output += "joy"
-        # if result[2] > 0.3:
-        #     output += "neutral" 
-        # if result[3] > 0.3:
-        #     output += "sadness"
-        # if result[4] > 0.3:
-        #     output += "surprise_fear"
-        # if output == "":
-        #     output = "No result"
 
-        # r = str(result)
+        self.emo = ""
+        if result[0] > 0.3:
+            self.emo += "anger_disgust" 
+        if result[1] > 0.3:
+            self.emo += "joy"
+        if result[2] > 0.3:
+            self.emo += "neutral" 
+        if result[3] > 0.3:
+            self.emo += "sadness"
+        if result[4] > 0.3:
+            self.emo += "surprise_fear"
+        if self.emo == "":
+            self.emo = "No result"
         
         return result
     

@@ -11,7 +11,7 @@ from PySide2.QtGui import QPixmap, QImage, QPainter, QPen
 from PySide2.QtCharts import QtCharts
 
 import pyside2_faceReader_draw_image
-import pyside2_faceReader_box
+from pyside2_faceReader_box_movable import Grabber
 from pyside2_faceReader_model import FaceReader
 
 from random import random
@@ -28,6 +28,7 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
             elif message == "start":
                 model = FaceReader(outputs_queue)
                 count = 0
+                # redefine xywh here so we can update them from the queue
                 while True:
                     if not inputs_queue.empty():
                         message = inputs_queue.get()
@@ -35,6 +36,10 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                         if message == 'STOP':
                             print(f'stopping')
                             break
+                        if "UPDATE" in message:
+                            pass
+                        else:
+                            continue
                     else:
                         model.run(x,y,w,h, count)
                         count += 1 
@@ -45,10 +50,10 @@ class Menu(QMainWindow):
     default_title = "FaceNet"
     face_box = None
     face_reader = None
+    # face_reader_2 = None
 
-    def __init__(self, numpy_image=None, opacity=1, start_position=(300, 300, 550, 500)):
+    def __init__(self, numpy_image=None, start_position=(300, 300, 550, 500)):
         super().__init__()   
-        self.opacity = opacity
         self.drawing = False
         self.brushSize = 1
         self.brushColor = Qt.red
@@ -88,9 +93,8 @@ class Menu(QMainWindow):
         self.outputs_queue = Queue()
 
         self._graph_timer = QTimer()
-        self._graph_timer.setInterval(1000)
+        self._graph_timer.setInterval(2000)
         self._graph_timer.timeout.connect(self.create_graph)
-        self._graph_timer.start()
         
         # New snip
         new_snip_action = QAction("Draw Box", self)
@@ -114,28 +118,15 @@ class Menu(QMainWindow):
         self.snippingTool = pyside2_faceReader_draw_image.SnippingWidget(self)
         self.setGeometry(*start_position)
 
-        # From the second initialization, both arguments will be valid 
-        # self.image = QPixmap("background.PNG")
         self.show()
 
+
     def create_graph(self):
+        self.face_lock.acquire()
         self.emotion_set = QtCharts.QBarSet('Confidence Level')
 
-        # self.emotion_set.append([0, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
-        # r1 = random()
-        # r2 = random()
-        # r3 = random()
-        # r4 = random()
-        # r5 = random()
-
-        # self.face_anger_digust = r1
-        # self.face_happy = r2
-        # self.face_neutral = r3
-        # self.face_sadness = r4
-        # self.face_surprise_fear = r5
-
         new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
-        print(str(new_graph_value))
+        print(f"----- New graph value{str(new_graph_value)}--------------")
 
         self.face_anger_digust = new_graph_value[0][0]
         self.face_happy = new_graph_value[0][1]
@@ -150,7 +141,7 @@ class Menu(QMainWindow):
 
         self.face_confidence_level = numpy.zeros((1,5))
         self.face_confidence_entry_count = 0
-
+        self.face_lock.release()
         chart = QtCharts.QChart()
         chart.addSeries(series)
         chart.setTitle('ReLuu FaceReader')
@@ -178,25 +169,26 @@ class Menu(QMainWindow):
         chartView.setRenderHint(QPainter.Antialiasing)
 
         self.setCentralWidget(chartView)
-
+   
 
     def __new_image_window(self):
         self.snippingTool.start()
+
     
     def __create_box(self, x,y,w,h):
-        Menu.face_box = pyside2_faceReader_box.Box(x,y,w,h)
+        width = w-x
+        height = h-y
+        Menu.face_box = Grabber(x,y,width,height, self.inputs_queue)
         self.box_x = x
         self.box_y = y
         self.box_w = w
         self.box_h = h
         self.box_drawn_can_start = True
 
+
     def __start_program(self):
         if self.box_drawn_can_start and not self.model_running:
-            # self._graph_timer = QTimer()
-            # self._graph_timer.setInterval(1000)
-            # self._graph_timer.timeout.connect(self.__graph)
-            # self._graph_timer.start()
+            self._graph_timer.start()
 
             self.face_model_process = Process(target=model_worker, args=(self.inputs_queue, self.outputs_queue, 
                                             self.box_x, self.box_y, self.box_w, self.box_h))
@@ -216,15 +208,15 @@ class Menu(QMainWindow):
             self.face_confidence_entry_count +=1
             face_confidence_output = self.outputs_queue.get()
             self.face_confidence_level += face_confidence_output
+            print("-------emotion calculated-------")
             self.face_lock.release()
 
     def __stop_program(self):
         if self.face_model_process is not None:    
             self.face_model_process.terminate()
-
-            print("---closing model---")
-            self.model_running = False
             self._graph_timer.stop()
+            self.model_running = False
+            print("---closing model---")
 
     def __close_box(self):
         if Menu.face_box:
@@ -293,6 +285,7 @@ class Menu(QMainWindow):
 
     # TODO exit application when we exit all windows
     def closeEvent(self, event):
+        Menu.face_box.close()
         event.accept()
 
     @staticmethod
