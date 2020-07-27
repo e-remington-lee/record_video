@@ -12,7 +12,7 @@ class VLine(QFrame):
 
 class Grabber(QWidget):
     dirty = True
-    def __init__(self, x, y, w, h, inputs_queue):
+    def __init__(self, x, y, w, h, inputs_queue, update_position_queue, update_position_lock):
         QWidget.__init__(self)   
         # center title!     
         self.setWindowTitle('ReLuu FaceReader')
@@ -21,6 +21,8 @@ class Grabber(QWidget):
         self.w = w
         self.h = h
         self.inputs_queue = inputs_queue
+        self.update_position_queue = update_position_queue
+        self.update_position_lock = update_position_lock
         self.setGeometry(self.x, self.y, self.w, self.h)
         # Window stays on top, and the other 2 combine to remove the min/close/expand buttons
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.CustomizeWindowHint | Qt.WindowTitleHint)        
@@ -36,40 +38,6 @@ class Grabber(QWidget):
         self.grabWidget = QWidget()
         self.grabWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         layout.addWidget(self.grabWidget)
-
-        ######
-        # self.panel = QWidget()
-        # layout.addWidget(self.panel)
-        # panelLayout = QHBoxLayout()
-        # self.panel.setLayout(panelLayout)
-        # panelLayout.setContentsMargins(0, 0, 0, 0)
-        # self.setContentsMargins(1, 1, 1, 1)
-
-        # self.configButton = QPushButton(self.style().standardIcon(QStyle.SP_ComputerIcon), '')
-        # self.configButton.setFlat(True)
-        # panelLayout.addWidget(self.configButton)
-
-        # panelLayout.addWidget(VLine())
-
-        # self.fpsSpinBox = QSpinBox()
-        # panelLayout.addWidget(self.fpsSpinBox)
-        # self.fpsSpinBox.setRange(1, 50)
-        # self.fpsSpinBox.setValue(15)
-        # panelLayout.addWidget(QLabel('fps'))
-
-        # panelLayout.addWidget(VLine())
-
-        # self.widthLabel = QLabel()
-        # panelLayout.addWidget(self.widthLabel)
-        # self.widthLabel.setFrameShape(QLabel.StyledPanel)
-
-        # panelLayout.addWidget(QLabel('x'))
-
-        # self.heightLabel = QLabel()
-        # panelLayout.addWidget(self.heightLabel)
-        # self.heightLabel.setFrameShape(QLabel.StyledPanel)
-        ######
-
         self.show()
 
     def updateMask(self):
@@ -80,14 +48,22 @@ class Grabber(QWidget):
         grabGeometry = self.grabWidget.geometry()
         grabGeometry.moveTopLeft(self.grabWidget.mapToGlobal(QPoint(0, 0)))
         
+        self.update_position_lock.acquire()
         #Sends info to the input queue
         x1 = grabGeometry.getRect()[0]
         y1 = grabGeometry.getRect()[1]
         width = grabGeometry.getRect()[2]
         height = grabGeometry.getRect()[3]
         message = f"UPDATE {x1} {y1} {width} {height}" 
+        if not self.update_position_queue.empty():
+            _ = self.update_position_queue.get()
+            self.update_position_queue.put(message)
+        else:
+            self.update_position_queue.put(message)
         self.inputs_queue.put(message)
 
+        self.update_position_lock.release()
+        
         # get the actual margins between the grabWidget and the window margins
         left = frameRect.left() - grabGeometry.left()
         top = frameRect.top() - grabGeometry.top()
@@ -142,7 +118,7 @@ if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     queue = Queue()
-    grabber = Grabber(1000, 600, 300, 400, queue)
+    # grabber = Grabber(1000, 600, 300, 400, queue)
     # grabber.show()
     sys.exit(app.exec_())
 

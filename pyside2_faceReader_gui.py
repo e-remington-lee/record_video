@@ -39,7 +39,6 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 width = w
                 height = h
                 ## Add the queue here that triggers the "before model start" facebox movement to end
-                global_model_start = True
                 print("################## ending")
                 start2 = datetime.datetime.now()
                 print(start2-start1)
@@ -110,21 +109,22 @@ class Menu(QMainWindow):
         self.inputs_queue = Queue()
         self.outputs_queue = Queue()
         #Seems clunky, idk
-        self.moveable_queue = Queue()
+        self.update_position_queue = Queue(1)
+        self.update_position_lock = threading.Lock()
 
         self._graph_timer = QTimer()
         self._graph_timer.setInterval(2000)
         self._graph_timer.timeout.connect(self.create_graph)
 
-        self.delete_timer = QTimer()
-        self.delete_timer.setInterval(1500)        
-        self.delete_timer.timeout.connect(self.print_cords_forme)
-        self.delete_timer.start()
+        # self.delete_timer = QTimer()
+        # self.delete_timer.setInterval(1500)        
+        # self.delete_timer.timeout.connect(self.print_cords_forme)
+        # self.delete_timer.start()
 
-        self.delete_timer2 = QTimer()
-        self.delete_timer2.setInterval(33)        
-        self.delete_timer2.timeout.connect(self.update_position_model_not_running)
-        self.delete_timer2.start()
+        # self.delete_timer2 = QTimer()
+        # self.delete_timer2.setInterval(33)        
+        # self.delete_timer2.timeout.connect(self.update_position_model_not_running)
+        # self.delete_timer2.start()
 
         # New snip
         new_snip_action = QAction("Draw Box", self)
@@ -156,7 +156,7 @@ class Menu(QMainWindow):
         self.emotion_set = QtCharts.QBarSet('Confidence Level')
 
         new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
-        # print(f"----- New graph value{str(new_graph_value)}--------------")
+        print(f"----- New graph value{str(new_graph_value)}--------------")
 
         self.face_anger_digust = new_graph_value[0][0]
         self.face_happy = new_graph_value[0][1]
@@ -202,30 +202,10 @@ class Menu(QMainWindow):
         self.snippingTool.start()
 
 
-    # Only used when the model is not running
-    def update_position_model_not_running(self):
-        if not global_model_start:
-            if not self.inputs_queue.empty():
-                message = self.inputs_queue.get()
-                print(f'message:', message)
-                if "UPDATE" in message:
-                    new_cords = message.split(" ")
-                    self.box_x = int(new_cords[1])
-                    self.box_y = int(new_cords[2])
-                    self.box_w = self.box_x+int(new_cords[3])
-                    self.box_h = self.box_y+int(new_cords[4])
-    
-
-    def print_cords_forme(self):
-        if not global_model_start:
-            print("printing cords")
-            print(self.box_x, self.box_y, self.box_w, self.box_h)
-
-
     def __create_box(self, x,y,w,h):
         width = w-x
         height = h-y
-        Menu.face_box = Grabber(x,y,width,height, self.inputs_queue)
+        Menu.face_box = Grabber(x,y,width,height, self.inputs_queue, self.update_position_queue, self.update_position_lock)
         self.box_x = x
         self.box_y = y
         self.box_w = w
@@ -235,16 +215,49 @@ class Menu(QMainWindow):
 
     def __start_program(self):
         if self.box_drawn_can_start and not self.model_running:
+            self.update_position_lock.acquire()
             self._graph_timer.start()
+
+            if not self.update_position_queue.empty():
+                message = self.update_position_queue.get()
+                new_cords = message.split(" ")
+                self.box_x = int(new_cords[1])
+                self.box_y = int(new_cords[2])
+                self.box_w = self.box_x+int(new_cords[3])
+                self.box_h = self.box_y+int(new_cords[4])
+
+            self.update_position_queue.put(message) 
             self.face_model_process = Process(target=model_worker, args=(self.inputs_queue, self.outputs_queue, self.box_x, self.box_y, self.box_w, self.box_h))
+            
             self.face_model_process.start()
             self.model_running = True
             self.inputs_queue.put("start")
+            self.update_position_lock.release()
         elif not self.box_drawn_can_start:
             print("---Cannot start program, box not drawn---")
         else:
             print("---model running___")
-        
+
+
+    # Only used when the model is not running
+    # def update_position_model_not_running(self):
+    #     if not global_model_start:
+    #         if not self.inputs_queue.empty():
+    #             message = self.inputs_queue.get()
+    #             print(f'message:', message)
+    #             if "UPDATE" in message:
+    #                 new_cords = message.split(" ")
+    #                 self.box_x = int(new_cords[1])
+    #                 self.box_y = int(new_cords[2])
+    #                 self.box_w = self.box_x+int(new_cords[3])
+    #                 self.box_h = self.box_y+int(new_cords[4])
+    
+
+    # def print_cords_forme(self):
+    #     if not global_model_start:
+    #         print("printing cords")
+    #         print(self.box_x, self.box_y, self.box_w, self.box_h)  
+
 
     def calculate_emotion(self):
         if not self.outputs_queue.empty():
