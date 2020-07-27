@@ -16,6 +16,10 @@ from pyside2_faceReader_model import FaceReader
 
 from random import random
 
+import datetime
+
+global_model_start = False
+
 def model_worker(inputs_queue, outputs_queue,x,y,w,h):
     while True:
         if not inputs_queue.empty():
@@ -26,12 +30,19 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 print(f'stopping')
                 break
             elif message == "start":
+                start1 = datetime.datetime.now()
+                print("################## starting")
                 model = FaceReader(outputs_queue)
                 count = 0
                 x1 = x
                 y1 = y
                 width = w
                 height = h
+                ## Add the queue here that triggers the "before model start" facebox movement to end
+                global_model_start = True
+                print("################## ending")
+                start2 = datetime.datetime.now()
+                print(start2-start1)
                 while True:
                     if not inputs_queue.empty():
                         message = inputs_queue.get()
@@ -54,24 +65,24 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                             count = 0
 
 class Menu(QMainWindow):
-    default_title = "FaceNet"
+    default_title = "ReLuu FaceReader"
     face_box = None
     face_reader = None
-    # face_reader_2 = None
 
-    def __init__(self, numpy_image=None, start_position=(300, 300, 550, 500)):
+    def __init__(self, numpy_image=None, start_position=(200, 300, 550, 500)):
         super().__init__()   
         self.drawing = False
         self.brushSize = 1
         self.brushColor = Qt.red
         self.lastPoint = QPoint()
         self.total_snips = 0
-        self.title = Menu.default_title
-        self.model_running = False
+        self.setWindowTitle(Menu.default_title)
         self.box_x = None
         self.box_y = None
         self.box_w = None
         self.box_h = None
+
+        self.model_running = False
         self.box_drawn_can_start = False
 
         self.face_anger_digust = 0
@@ -98,11 +109,23 @@ class Menu(QMainWindow):
 
         self.inputs_queue = Queue()
         self.outputs_queue = Queue()
+        #Seems clunky, idk
+        self.moveable_queue = Queue()
 
         self._graph_timer = QTimer()
         self._graph_timer.setInterval(2000)
         self._graph_timer.timeout.connect(self.create_graph)
-        
+
+        self.delete_timer = QTimer()
+        self.delete_timer.setInterval(1500)        
+        self.delete_timer.timeout.connect(self.print_cords_forme)
+        self.delete_timer.start()
+
+        self.delete_timer2 = QTimer()
+        self.delete_timer2.setInterval(33)        
+        self.delete_timer2.timeout.connect(self.update_position_model_not_running)
+        self.delete_timer2.start()
+
         # New snip
         new_snip_action = QAction("Draw Box", self)
         new_snip_action.triggered.connect(self.__new_image_window)
@@ -133,7 +156,7 @@ class Menu(QMainWindow):
         self.emotion_set = QtCharts.QBarSet('Confidence Level')
 
         new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
-        print(f"----- New graph value{str(new_graph_value)}--------------")
+        # print(f"----- New graph value{str(new_graph_value)}--------------")
 
         self.face_anger_digust = new_graph_value[0][0]
         self.face_happy = new_graph_value[0][1]
@@ -152,9 +175,7 @@ class Menu(QMainWindow):
         chart = QtCharts.QChart()
         chart.addSeries(series)
         chart.setTitle('ReLuu FaceReader')
-
         # chart.setAnimationOptions(QtCharts.SeriesAnimations)
-
         emotions = ('Angery and Disgusted', 'Happy', 'Neutral', 'Sadness', 'Fear and Surprise')
 
         axisY = QtCharts.QBarCategoryAxis()
@@ -174,14 +195,33 @@ class Menu(QMainWindow):
 
         chartView = QtCharts.QChartView(chart)
         chartView.setRenderHint(QPainter.Antialiasing)
-
         self.setCentralWidget(chartView)
    
 
     def __new_image_window(self):
         self.snippingTool.start()
 
+
+    # Only used when the model is not running
+    def update_position_model_not_running(self):
+        if not global_model_start:
+            if not self.inputs_queue.empty():
+                message = self.inputs_queue.get()
+                print(f'message:', message)
+                if "UPDATE" in message:
+                    new_cords = message.split(" ")
+                    self.box_x = int(new_cords[1])
+                    self.box_y = int(new_cords[2])
+                    self.box_w = self.box_x+int(new_cords[3])
+                    self.box_h = self.box_y+int(new_cords[4])
     
+
+    def print_cords_forme(self):
+        if not global_model_start:
+            print("printing cords")
+            print(self.box_x, self.box_y, self.box_w, self.box_h)
+
+
     def __create_box(self, x,y,w,h):
         width = w-x
         height = h-y
@@ -196,27 +236,25 @@ class Menu(QMainWindow):
     def __start_program(self):
         if self.box_drawn_can_start and not self.model_running:
             self._graph_timer.start()
-
-            self.face_model_process = Process(target=model_worker, args=(self.inputs_queue, self.outputs_queue, 
-                                            self.box_x, self.box_y, self.box_w, self.box_h))
+            self.face_model_process = Process(target=model_worker, args=(self.inputs_queue, self.outputs_queue, self.box_x, self.box_y, self.box_w, self.box_h))
             self.face_model_process.start()
             self.model_running = True
             self.inputs_queue.put("start")
-
         elif not self.box_drawn_can_start:
             print("---Cannot start program, box not drawn---")
         else:
             print("---model running___")
         
+
     def calculate_emotion(self):
         if not self.outputs_queue.empty():
             self.face_lock.acquire()
-
             self.face_confidence_entry_count +=1
             face_confidence_output = self.outputs_queue.get()
             self.face_confidence_level += face_confidence_output
             print("-------emotion calculated-------")
             self.face_lock.release()
+
 
     def __stop_program(self):
         if self.face_model_process is not None:    
@@ -225,12 +263,14 @@ class Menu(QMainWindow):
             self.model_running = False
             print("---closing model---")
 
+
     def __close_box(self):
         if Menu.face_box:
             self.__stop_program()
             Menu.face_box.close_window()
             self.box_drawn_can_start = False
             print("---closing box---")
+
 
     def __graph(self):
         self.face_lock.acquire()
@@ -266,12 +306,6 @@ class Menu(QMainWindow):
         # self.face_confidence_level = numpy.zeros((1,5))
         # self.face_confidence_entry_count = 0
         self.face_lock.release()
-        
-
-    # def paintEvent(self, event):
-    #     painter = QPainter(self)
-    #     rect = QRect(0,  self.toolbar.height(), self.image.width(), self.image.height())
-    #     painter.drawPixmap(rect, self.image)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -290,16 +324,9 @@ class Menu(QMainWindow):
         if event.button == Qt.LeftButton:
             self.drawing = False   
 
-    # TODO exit application when we exit all windows
     def closeEvent(self, event):
         Menu.face_box.close()
         event.accept()
-
-    @staticmethod
-    def convert_numpy_img_to_qpixmap(np_img):
-        height, width, channel = np_img.shape
-        bytesPerLine = 3 * width
-        return QPixmap(QImage(np_img.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped())
 
 
 if __name__ == '__main__':

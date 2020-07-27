@@ -38,36 +38,36 @@ class Grabber(QWidget):
         layout.addWidget(self.grabWidget)
 
         ######
-        self.panel = QWidget()
-        layout.addWidget(self.panel)
-        panelLayout = QHBoxLayout()
-        self.panel.setLayout(panelLayout)
-        panelLayout.setContentsMargins(0, 0, 0, 0)
-        self.setContentsMargins(1, 1, 1, 1)
+        # self.panel = QWidget()
+        # layout.addWidget(self.panel)
+        # panelLayout = QHBoxLayout()
+        # self.panel.setLayout(panelLayout)
+        # panelLayout.setContentsMargins(0, 0, 0, 0)
+        # self.setContentsMargins(1, 1, 1, 1)
 
-        self.configButton = QPushButton(self.style().standardIcon(QStyle.SP_ComputerIcon), '')
-        self.configButton.setFlat(True)
-        panelLayout.addWidget(self.configButton)
+        # self.configButton = QPushButton(self.style().standardIcon(QStyle.SP_ComputerIcon), '')
+        # self.configButton.setFlat(True)
+        # panelLayout.addWidget(self.configButton)
 
-        panelLayout.addWidget(VLine())
+        # panelLayout.addWidget(VLine())
 
-        self.fpsSpinBox = QSpinBox()
-        panelLayout.addWidget(self.fpsSpinBox)
-        self.fpsSpinBox.setRange(1, 50)
-        self.fpsSpinBox.setValue(15)
-        panelLayout.addWidget(QLabel('fps'))
+        # self.fpsSpinBox = QSpinBox()
+        # panelLayout.addWidget(self.fpsSpinBox)
+        # self.fpsSpinBox.setRange(1, 50)
+        # self.fpsSpinBox.setValue(15)
+        # panelLayout.addWidget(QLabel('fps'))
 
-        panelLayout.addWidget(VLine())
+        # panelLayout.addWidget(VLine())
 
-        self.widthLabel = QLabel()
-        panelLayout.addWidget(self.widthLabel)
-        self.widthLabel.setFrameShape(QLabel.StyledPanel)
+        # self.widthLabel = QLabel()
+        # panelLayout.addWidget(self.widthLabel)
+        # self.widthLabel.setFrameShape(QLabel.StyledPanel)
 
-        panelLayout.addWidget(QLabel('x'))
+        # panelLayout.addWidget(QLabel('x'))
 
-        self.heightLabel = QLabel()
-        panelLayout.addWidget(self.heightLabel)
-        self.heightLabel.setFrameShape(QLabel.StyledPanel)
+        # self.heightLabel = QLabel()
+        # panelLayout.addWidget(self.heightLabel)
+        # self.heightLabel.setFrameShape(QLabel.StyledPanel)
         ######
 
         self.show()
@@ -85,22 +85,14 @@ class Grabber(QWidget):
         y1 = grabGeometry.getRect()[1]
         width = grabGeometry.getRect()[2]
         height = grabGeometry.getRect()[3]
-        
         message = f"UPDATE {x1} {y1} {width} {height}" 
         self.inputs_queue.put(message)
-
-        # if not self.inputs_queue.empty():
-        #         message = self.inputs_queue.get()
-        #         if "UPDATE" in message:
-        #             x = message.split(" ")
-        #             print(x)      
 
         # get the actual margins between the grabWidget and the window margins
         left = frameRect.left() - grabGeometry.left()
         top = frameRect.top() - grabGeometry.top()
         right = frameRect.right() - grabGeometry.right()
         bottom = frameRect.bottom() - grabGeometry.bottom()
-        
 
         # reset the geometries to get "0-point" rectangles for the mask
         frameRect.moveTopLeft(QPoint(0, 0))
@@ -114,11 +106,9 @@ class Grabber(QWidget):
         region -= QRegion(grabGeometry)
         self.setMask(region)
 
-        
-
         # update the grab size according to grabWidget geometry
-        self.widthLabel.setText(str(self.grabWidget.width()))
-        self.heightLabel.setText(str(self.grabWidget.height()))
+        # self.widthLabel.setText(str(self.grabWidget.width()))
+        # self.heightLabel.setText(str(self.grabWidget.height()))
         
 
     def resizeEvent(self, event):
@@ -155,3 +145,4 @@ if __name__ == '__main__':
     grabber = Grabber(1000, 600, 300, 400, queue)
     # grabber.show()
     sys.exit(app.exec_())
+
