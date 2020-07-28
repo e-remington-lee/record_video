@@ -38,11 +38,11 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 y1 = y
                 width = w
                 height = h
-                ## Add the queue here that triggers the "before model start" facebox movement to end
                 print("################## ending")
                 start2 = datetime.datetime.now()
                 print(start2-start1)
                 while True:
+                    #Use multiple queues
                     if not inputs_queue.empty():
                         message = inputs_queue.get()
                         print(f'message:', message)

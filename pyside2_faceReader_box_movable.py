@@ -14,7 +14,6 @@ class Grabber(QWidget):
     dirty = True
     def __init__(self, x, y, w, h, inputs_queue, update_position_queue, update_position_lock):
         QWidget.__init__(self)   
-        # center title!     
         self.setWindowTitle('ReLuu FaceReader')
         self.x = x
         self.y = y
@@ -24,6 +23,7 @@ class Grabber(QWidget):
         self.update_position_queue = update_position_queue
         self.update_position_lock = update_position_lock
         self.setGeometry(self.x, self.y, self.w, self.h)
+        self.acceptDrops()
         # Window stays on top, and the other 2 combine to remove the min/close/expand buttons
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.CustomizeWindowHint | Qt.WindowTitleHint)        
         
@@ -54,12 +54,13 @@ class Grabber(QWidget):
         y1 = grabGeometry.getRect()[1]
         width = grabGeometry.getRect()[2]
         height = grabGeometry.getRect()[3]
-        message = f"UPDATE {x1} {y1} {width} {height}" 
+        message = f"UPDATE {x1} {y1} {width} {height}"
         if not self.update_position_queue.empty():
             _ = self.update_position_queue.get()
             self.update_position_queue.put(message)
         else:
             self.update_position_queue.put(message)
+            
         self.inputs_queue.put(message)
 
         self.update_position_lock.release()
@@ -92,6 +93,14 @@ class Grabber(QWidget):
         # the first resizeEvent is called *before* any first-time showEvent and
         # paintEvent, there's no need to update the mask until then; see below
         if not self.dirty:
+            # print("rezise event")
+            self.updateMask()
+
+
+    def moveEvent(self, event):
+        super(Grabber, self).moveEvent(event)
+        if not self.dirty:
+            # print("Moving it")
             self.updateMask()
 
     def paintEvent(self, event):
@@ -118,7 +127,10 @@ if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     queue = Queue()
-    # grabber = Grabber(1000, 600, 300, 400, queue)
+    queue2 = Queue()
+    import threading
+    abx = threading.Lock()
+    grabber = Grabber(1000, 600, 300, 400, queue, queue2, abx)
     # grabber.show()
     sys.exit(app.exec_())
 
