@@ -1,6 +1,6 @@
 video_original
 video_frames
-venv
+venv2
 tfe
 faceNet
 output
@@ -33,7 +33,7 @@ ISAFE MAIN DATABASE FOR PUBLIC
 ISAFE_removed_bad_images
 old_emotion_detect_files
 RAF_database
-faceNet
+faceReader
 
 Kaggle_audio_dataset
 SAVEE_database

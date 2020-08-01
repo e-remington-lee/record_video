@@ -16,9 +16,6 @@ from pyside2_faceReader_model import FaceReader
 
 from random import random
 
-import datetime
-
-global_model_start = False
 
 def model_worker(inputs_queue, outputs_queue,x,y,w,h):
     while True:
@@ -30,17 +27,12 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 print(f'stopping')
                 break
             elif message == "start":
-                start1 = datetime.datetime.now()
-                print("################## starting")
                 model = FaceReader(outputs_queue)
                 count = 0
                 x1 = x
                 y1 = y
                 width = w
                 height = h
-                print("################## ending")
-                start2 = datetime.datetime.now()
-                print(start2-start1)
                 while True:
                     #Use multiple queues
                     if not inputs_queue.empty():

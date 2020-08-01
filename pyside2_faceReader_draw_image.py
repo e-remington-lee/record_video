@@ -1,9 +1,6 @@
-import tkinter as tk
 import numpy as np
-import cv2
 from PIL import ImageGrab
 from PySide2 import QtWidgets, QtCore, QtGui
-import faceReader_gui
 from PySide2.QtCore import Qt
 
 # Testing
@@ -18,10 +15,8 @@ class SnippingWidget(QtWidgets.QWidget):
         self.parent = parent
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
-        root = tk.Tk()
-        screen_width = root.winfo_screenwidth()
-        screen_height = root.winfo_screenheight()
-        self.setGeometry(0, 0, screen_width, screen_height)
+        width, height = pyautogui.size()
+        self.setGeometry(0, 0, width, height)
         self.begin = QtCore.QPoint()
         self.end = QtCore.QPoint()
         self.x11 = None

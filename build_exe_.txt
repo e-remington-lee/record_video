@@ -1,0 +1,28 @@
+The other PC needs a microsoft distribution 2015-2019, the installer should have a check that installs both of them
+
+run this to build for debug purposes
+pyinstaller --noconfirm --onedir --console --debug "all" --additional-hooks-dir "C:/Coding/Build/hooks" --add-data="tflite_model\optimized_model_8063.tflite;output\\;cascades\\haarcascade_frontalface_default.xml" "C:/Coding/Build/pyside2_faceReader_gui.py"
+pyinstaller --noconfirm --onedir --console --debug "all" --add-data="tflite_model/optimized_model_8063.tflite;tflite_model" --add-data="cascades/haarcascade_frontalface_default.xml;cascades" "pyside2_faceReader_gui.py"
+pyinstaller --noconfirm --onefile --add-data="tflite_model/optimized_model_8063.tflite;tflite_model" --add-data="cascades/haarcascade_frontalface_default.xml;cascades" "pyside2_faceReader_gui.py"
+
+
+pyside2_faceReader_gui.exe
+
+## you can exclude like this
+spec excludes = excludes=["scipy", "tensorflow.python"], 
+
+## Create python 3.7 environment for tflite_runtime
+ virtualenv -p "C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe" venv_tflite
+
+ pip install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-win_amd64.whl
+
+
+ ## Module not found: tensorflow
+ when using tflite
+https://github.com/tensorflow/tensorflow/issues/33153 
+    It seems there is a workaround to copy _interpreter_wrapper.so file from tflite_runtime one directory out (to site-packages or current directory). 
+    This didn't help for AWS Lambda though, because Amazon Linux uses older version of glibc. 
+    I ended up creating minimal C program instead of using TF Lite Python package.
+
+copy tensorflow_wrap_interpreter_wrapper.pyo, tensorflow_wrap_interpreter_wrapper.py, _tensorflow_wrap_interpreter_wrapper.pyd out of tflite_runtime
+and add them into the site_packages folder. This will trick pyinstaller to not import 
