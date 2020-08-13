@@ -4,11 +4,8 @@ venv2
 tfe
 faceNet
 output
-FERG_DB_256
-emotions
-emotions_5
-emotions_5_test
-emotions_copy_test_dir
+
+
 img_test
 jaffedbase
 checkpoint
@@ -16,11 +13,7 @@ KDEF_and_AKDEF
 ffhq_data
 face_test
 production_test
-emotion_model.model
-emotion_model_generated_faces.model
-emotion_model_v1.0_realfaces.model
-emotion_model_v1.0_3cnn_2dns_input64x64.model
-fer2013.csv
+
 place_holder.jpg
 background.png
 tflite_model
@@ -30,17 +23,28 @@ dist
 *.exe
 *.spec
 
-affectNet_Images
-TESS_and_RAVDESS
-Adience_gender_182.zip
-ISAFE MAIN DATABASE FOR PUBLIC
-ISAFE_removed_bad_images
-old_emotion_detect_files
-RAF_database
+databases
+labeled_data
 faceReader
 utility_functions/shape_predictor_68_face_landmarks.dat
-Kaggle_audio_dataset
-SAVEE_database
 keep_output
 
-
+FERG_DB_256
+emotion_model.model
+emotion_model_generated_faces.model
+emotion_model_v1.0_realfaces.model
+emotion_model_v1.0_3cnn_2dns_input64x64.model
+fer2013.csv
+affectNet_Images
+TESS_and_RAVDESS
+ISAFE MAIN DATABASE FOR PUBLIC
+ISAFE_removed_bad_images
+RAF_database
+Kaggle_audio_dataset
+SAVEE_database
+emotions
+emotions_5
+emotions_5_sound
+emotions_5_sound_test
+emotions_5_test
+emotions_copy_test_dir

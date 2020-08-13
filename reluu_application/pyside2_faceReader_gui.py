@@ -34,7 +34,8 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                 width = w
                 height = h
                 while True:
-                    #Use multiple queues
+                    # Use multiple queues, the input message queues get consumed before the model starts so we don't process pre-start button 
+                    # changes to the location
                     if not inputs_queue.empty():
                         message = inputs_queue.get()
                         print(f'message:', message)
