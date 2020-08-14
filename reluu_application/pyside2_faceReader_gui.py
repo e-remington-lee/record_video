@@ -16,7 +16,7 @@ from pyside2_faceReader_model import FaceReader
 
 from random import random
 
-
+## Move to different file?
 def model_worker(inputs_queue, outputs_queue,x,y,w,h):
     while True:
         if not inputs_queue.empty():
