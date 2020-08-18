@@ -24,7 +24,7 @@ build
 dist
 *.exe
 *.spec
-
+parse_dataset_labels/parse_sound_files/tess_ravdess.json
 databases
 labeled_data
 faceReader
