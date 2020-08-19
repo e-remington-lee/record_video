@@ -1,0 +1,1 @@
+pyuic5 -x  "D:\QtDesigner\All Ui Files\test.ui" -o "test.py"
