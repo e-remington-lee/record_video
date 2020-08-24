@@ -55,11 +55,11 @@ class Grabber(QWidget):
         width = grabGeometry.getRect()[2]
         height = grabGeometry.getRect()[3]
         message = f"UPDATE {x1} {y1} {width} {height}"
-        if not self.update_position_queue.empty():
-            _ = self.update_position_queue.get()
-            self.update_position_queue.put(message)
-        else:
-            self.update_position_queue.put(message)
+        # if not self.update_position_queue.empty():
+        #     _ = self.update_position_queue.get()
+        #     self.update_position_queue.put(message)
+        # else:
+        #     self.update_position_queue.put(message)
             
         self.inputs_queue.put(message)
 
