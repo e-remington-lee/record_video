@@ -49,7 +49,8 @@ log_spectrogram = librosa.amplitude_to_db(spectogram)
 # n_mfcc = 13 is standard. One video talks about how there can be 26, but 13 is most valubale for AI 
 mfcc = librosa.feature.mfcc(signal, n_fft=n_fft, hop_length=hop_length, n_mfcc=13)
 
-
+mfcc = mfcc.T
+print(max(mfcc.tolist()))
 
 librosa.display.specshow(mfcc, sr=sr, hop_length=hop_length)
 plt.xlabel("Time")
@@ -57,5 +58,3 @@ plt.ylabel("MFCC")
 plt.colorbar()
 plt.show()
 
-mfcc = mfcc.T
-print(max(mfcc.toist()))
