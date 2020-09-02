@@ -25,8 +25,14 @@ dist
 *.exe
 *.spec
 parse_dataset_labels/parse_sound_files/tess_ravdess_train.json
-parse_dataset_labels/parse_sound_files/tess_ravdess_validate.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_validation.json
 parse_dataset_labels/parse_sound_files/tess_ravdess_test.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_train_norm.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_validation_norm.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_test_norm.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_train_norm_2.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_validation_norm_2.json
+parse_dataset_labels/parse_sound_files/tess_ravdess_test_norm_2.json
 databases
 labeled_data
 faceReader
