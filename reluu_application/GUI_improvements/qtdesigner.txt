@@ -1,3 +1,9 @@
 pyuic5 -x  "D:\QtDesigner\All Ui Files\test.ui" -o "test.py"
 pyuic5 -x  "reluu_application\\GUI_improvements\\main menu.ui" -o "main_menu.py"
 pyuic5 -x  "reluu_application\\GUI_improvements\\Login menu vbox.ui" -o "login_qt_designer.py"
+pyuic5 -x  "reluu_application\\GUI_improvements\\login_layout.ui" -o "login_layout.py"
+pyside2-uic "reluu_application\\GUI_improvements\\login_layout.ui" -o "login_layout.py"
+
+background color: #f3fcff
+
+button no hover:#d5f6ff after hover #befeff
