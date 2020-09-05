@@ -15,7 +15,7 @@ KDEF_and_AKDEF
 ffhq_data
 face_test
 production_test
-
+train_models_tensorflow/log_dir
 place_holder.jpg
 background.png
 tflite_model

@@ -31,7 +31,9 @@ class FaceReader():
         # super(FaceReader, self).__init__()
         # self.begin_session_allocate_memory()
         # self.model = tf.keras.models.load_model("faceReader\\xNet_v3.2.0_SGD_128x128_8028_8063")
-        self.model = tflite.Interpreter("tflite_model\\optimized_model_8063.tflite")
+        import os 
+        print(os.listdir())
+        self.model = tflite.Interpreter("tflite_model\\optimized_model_v4.0.0_7779.tflite")
         self.path = "output\\"
         self.outputs_queue = outputs_queue
         self.front_face_cascade = cv2.CascadeClassifier("cascades\\haarcascade_frontalface_default.xml")
@@ -75,11 +77,10 @@ class FaceReader():
             
         except KeyboardInterrupt:
             cv2.destroyAllWindows()  
-            tf.keras.backend.clear_session()
             print("Ending session")
 
     def predict(self, face):
-        size = 128
+        size = 80
         final_image = cv2.resize(face, (size,size))
         final_image = np.expand_dims(final_image, 0)
         
@@ -132,15 +133,15 @@ class FaceReader():
 
         return result[0]
     
-    @staticmethod
-    def begin_session_allocate_memory():
-        tf.keras.backend.clear_session()
-        tf.compat.v1.disable_eager_execution()
-        gpus = tf.config.experimental.list_physical_devices('GPU')
-        if gpus:
-            try:
-                for gpu in gpus:
-                    tf.config.experimental.set_memory_growth(gpu, True)
-            except RuntimeError as e:
-                print(e)
+    # @staticmethod
+    # def begin_session_allocate_memory():
+    #     tf.keras.backend.clear_session()
+    #     tf.compat.v1.disable_eager_execution()
+    #     gpus = tf.config.experimental.list_physical_devices('GPU')
+    #     if gpus:
+    #         try:
+    #             for gpu in gpus:
+    #                 tf.config.experimental.set_memory_growth(gpu, True)
+    #         except RuntimeError as e:
+    #             print(e)
 

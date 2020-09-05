@@ -219,7 +219,7 @@ class Menu(QMainWindow):
                 self.box_w = self.box_x+int(new_cords[3])
                 self.box_h = self.box_y+int(new_cords[4])
 
-            self.update_position_queue.put(message) 
+            # self.update_position_queue.put(message) 
             self.face_model_process = Process(target=model_worker, args=(self.inputs_queue, self.outputs_queue, self.box_x, self.box_y, self.box_w, self.box_h))
             
             self.face_model_process.start()

@@ -2,6 +2,9 @@ pyuic5 -x  "D:\QtDesigner\All Ui Files\test.ui" -o "test.py"
 pyuic5 -x  "reluu_application\\GUI_improvements\\main menu.ui" -o "main_menu.py"
 pyuic5 -x  "reluu_application\\GUI_improvements\\Login menu vbox.ui" -o "login_qt_designer.py"
 pyuic5 -x  "reluu_application\\GUI_improvements\\login_layout.ui" -o "login_layout.py"
+
+with pyside2 files, the original file is corrupted somehow, so just copy and paste the exact text into a new file and it works
+
 pyside2-uic "reluu_application\\GUI_improvements\\login_layout.ui" -o "login_layout.py"
 
 background color: #f3fcff
