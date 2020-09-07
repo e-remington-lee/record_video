@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>307</height>
    </rect>
   </property>
   <property name="palette">
@@ -120,7 +120,7 @@ background-color: #befeff
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="button_layout">
        <property name="leftMargin">
         <number>30</number>
        </property>
@@ -179,7 +179,11 @@ background-color: #befeff
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="spacing_layout_mainMenu"/>
+      <layout class="QHBoxLayout" name="spacing_layout_mainMenu">
+       <property name="topMargin">
+        <number>10</number>
+       </property>
+      </layout>
      </item>
     </layout>
    </item>

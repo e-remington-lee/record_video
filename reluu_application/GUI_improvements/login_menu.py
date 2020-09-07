@@ -3,6 +3,8 @@ from PySide2 import QtWidgets
 from PySide2 import QtGui
 from PySide2 import QtCore
 from login_menu_qtd import Ui_MainWindow
+from main_menu_qtd import Ui_mainMenu
+import grab_image
 
 class LoginWindow(QtWidgets.QWidget, Ui_MainWindow):
     def __init__(self, *args, **kwargs):
@@ -21,27 +23,23 @@ class LoginWindow(QtWidgets.QWidget, Ui_MainWindow):
             self.main_menu = MainMenu()
             self.main_menu.show()
         else: 
-            print("failed to login")
+            print("failed to login")            
 
 
-class MainMenu(QtWidgets.QWidget):
+class MainMenu(QtWidgets.QWidget, Ui_mainMenu):
     def __init__(self, *args, **kwargs):
         super(MainMenu, self).__init__(*args, **kwargs)
+        self.setupUi(self)
+        icon = QtGui.QIcon("reluu_application/GUI_improvements/logo_transparent_background.png")
+        self.setWindowIcon(icon)
 
-        self.start_model_button = QtWidgets.QPushButton()
-        self.start_model_button.setText("Start")
         self.start_model_button.clicked.connect(self.start_model)
-
-        self.logout_button = QtWidgets.QPushButton()
-        self.logout_button.setText("Logout")
-        self.logout_button.clicked.connect(self.logout)
-
-        self.layout = QtWidgets.QVBoxLayout()
-        self.layout.addWidget(self.start_model_button)
-        self.layout.addWidget(self.logout_button)
-        self.setLayout(self.layout)
+        self.sign_out_button.clicked.connect(self.logout)
+        self.abc = grab_image.GrabImage()
 
     def start_model(self):
+        self.close()
+        self.abc.start_grab()
         print("starting model")
     
     def logout(self):
