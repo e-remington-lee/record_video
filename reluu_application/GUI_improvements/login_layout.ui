@@ -182,19 +182,19 @@ background-color: #befeff
        <number>70</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="password_input">
+       <widget class="QLineEdit" name="email_input">
         <property name="font">
          <font>
           <pointsize>12</pointsize>
          </font>
         </property>
         <property name="placeholderText">
-         <string>Enter your password</string>
+         <string>Enter your email</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="email_input">
+       <widget class="QLineEdit" name="password_input">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -203,8 +203,11 @@ background-color: #befeff
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
         <property name="placeholderText">
-         <string>Enter your email</string>
+         <string>Enter your password</string>
         </property>
        </widget>
       </item>

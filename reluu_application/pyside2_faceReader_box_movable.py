@@ -1,3 +1,5 @@
+import sys
+import threading
 from PySide2.QtCore import Qt, QPoint
 from PySide2.QtWidgets import QApplication, QFrame, QWidget, QHBoxLayout, QVBoxLayout, QSizePolicy, QPushButton, QStyle, QSpinBox, QLabel
 from PySide2.QtGui import QRegion
@@ -124,11 +126,9 @@ class Grabber(QWidget):
 
 
 if __name__ == '__main__':
-    import sys
     app = QApplication(sys.argv)
     queue = Queue()
     queue2 = Queue()
-    import threading
     abx = threading.Lock()
     grabber = Grabber(1000, 600, 300, 400, queue, queue2, abx)
     # grabber.show()

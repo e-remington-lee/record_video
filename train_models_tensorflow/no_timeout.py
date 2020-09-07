@@ -131,12 +131,7 @@ model = make_model()
 model.summary()
 
 
-model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, decay=0.0001), loss='categorical_crossentropy', metrics=['acc', tf.keras.metrics.Precision(), tf.keras.metrics.Recall()])
-
-def convert_to_grayscale(img):
-      return tf.image.rgb_to_grayscale(img, name=None)
-# the preprocess function assumes 1 argument, the image, you do not need to add that inline
-# validation_datagen = ImageDataGenerator(rescale=1./255, preprocessing_function=convert_to_grayscale,)
+model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, decay=0.00004), loss='categorical_crossentropy', metrics=['acc', tf.keras.metrics.Precision(), tf.keras.metrics.Recall()])
 
 TRAINING_DIR = "../labeled_data/emotions_5/train/"
 train_datagen = ImageDataGenerator(
@@ -150,12 +145,12 @@ train_datagen = ImageDataGenerator(
       # fill_mode='nearest')
 
 train_generator = train_datagen.flow_from_directory(TRAINING_DIR, target_size=(i_s,i_s), 
-batch_size=32, class_mode="categorical")
+batch_size=64, class_mode="categorical")
 
 VALIDATION_DIR = "../labeled_data/emotions_5/validation/"
 validation_datagen = ImageDataGenerator(rescale=1./255)
 
-validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR, target_size=(i_s,i_s),batch_size=32, class_mode="categorical")
+validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR, target_size=(i_s,i_s),batch_size=64, class_mode="categorical")
 
 check_points = "../checkpoint/checkpoint.hb/"
 check_point_dir = os.path.dirname(check_points)
@@ -167,19 +162,19 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="./log_dir")
 lambda_callback_1 = tf.keras.callbacks.LambdaCallback(on_epoch_begin=lambda batch, logs : tf.keras.backend.clear_session())
 lambda_callback_2 = tf.keras.callbacks.LambdaCallback(on_epoch_begin=lambda batch, logs : make_model())
 
-model = tf.keras.models.load_model("..\\faceReader\\xNet_v4.0.0_SGD_80x80_7779\\")
+# model = tf.keras.models.load_model("..\\faceReader\\xNet_v4.0.0_SGD_80x80_7779\\")
 
 history = model.fit(train_generator,
-                            epochs=1,
+                            epochs=150,
                             verbose=1,  
                             validation_data=validation_generator,
                             callbacks=[cp_callback, lambda_callback_1, lambda_callback_2])
 
-faceReader_dir = "..\\faceReader\\xNet_v4.0.0_SGD_80x80_test\\"
+faceReader_dir = "..\\faceReader\\xNet_v4.0.1_SGD_80x80_night\\"
 
 tf.saved_model.save(model, faceReader_dir)
 
-test_dir = "../labeled_data/emotions_5/validation"
+test_dir = "../labeled_data/emotions_5/test"
 test_datagen = ImageDataGenerator(rescale=1./255)
 test_generator = test_datagen.flow_from_directory(test_dir, target_size=(i_s,i_s), 
 batch_size=64, class_mode="categorical")

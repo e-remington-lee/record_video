@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
 
+################################################################################
+## Form generated from reading UI file 'login_layout_qwidget.ui'
+##
+## Created by: Qt User Interface Compiler version 5.15.0
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
 from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
     QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
@@ -35,20 +43,20 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QPushButton::hover {\n"
-"background-color: #e1fbff\n"
+"background-color: #befeff\n"
 "}")
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2 = QVBoxLayout(MainWindow)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.logo_vbox = QVBoxLayout()
         self.logo_vbox.setObjectName(u"logo_vbox")
         self.logo_vbox.setSizeConstraint(QLayout.SetMaximumSize)
         self.logo_vbox.setContentsMargins(-1, -1, -1, 7)
-        self.logo = QLabel(self.centralwidget)
+        self.logo = QLabel(MainWindow)
         self.logo.setObjectName(u"logo")
         self.logo.setMaximumSize(QSize(150, 150))
-        self.logo.setPixmap(QPixmap("reluu_application/GUI_improvements/logo_transparent_background.png"))
+        self.logo.setPixmap(QPixmap(u"reluu_application/GUI_improvements/logo_transparent_background.png"))
         self.logo.setScaledContents(True)
         self.logo.setAlignment(Qt.AlignCenter)
 
@@ -58,7 +66,7 @@ class Ui_MainWindow(object):
         self.Sign_in_title.setObjectName(u"Sign_in_title")
         self.Sign_in_title.setSizeConstraint(QLayout.SetMinimumSize)
         self.Sign_in_title.setContentsMargins(75, 0, 70, -1)
-        self.sign_in = QLabel(self.centralwidget)
+        self.sign_in = QLabel(MainWindow)
         self.sign_in.setObjectName(u"sign_in")
         self.sign_in.setMaximumSize(QSize(16777215, 30))
         font = QFont()
@@ -81,25 +89,26 @@ class Ui_MainWindow(object):
         self.email_pw_vbox.setSpacing(20)
         self.email_pw_vbox.setObjectName(u"email_pw_vbox")
         self.email_pw_vbox.setContentsMargins(75, 0, 70, -1)
-        self.password_input = QLineEdit(self.centralwidget)
-        self.password_input.setObjectName(u"password_input")
+        self.email_input = QLineEdit(MainWindow)
+        self.email_input.setObjectName(u"email_input")
         font1 = QFont()
         font1.setPointSize(12)
-        self.password_input.setFont(font1)
-
-        self.email_pw_vbox.addWidget(self.password_input)
-
-        self.email_input = QLineEdit(self.centralwidget)
-        self.email_input.setObjectName(u"email_input")
-        self.email_input.setEnabled(True)
         self.email_input.setFont(font1)
 
         self.email_pw_vbox.addWidget(self.email_input)
 
+        self.password_input = QLineEdit(MainWindow)
+        self.password_input.setObjectName(u"password_input")
+        self.password_input.setEnabled(True)
+        self.password_input.setFont(font1)
+        self.password_input.setEchoMode(QLineEdit.Password)
+
+        self.email_pw_vbox.addWidget(self.password_input)
+
         self.sign_in_button_hbox = QHBoxLayout()
         self.sign_in_button_hbox.setSpacing(10)
         self.sign_in_button_hbox.setObjectName(u"sign_in_button_hbox")
-        self.keep_signed_in = QCheckBox(self.centralwidget)
+        self.keep_signed_in = QCheckBox(MainWindow)
         self.keep_signed_in.setObjectName(u"keep_signed_in")
         font2 = QFont()
         font2.setFamily(u"Segoe UI Symbol")
@@ -108,7 +117,7 @@ class Ui_MainWindow(object):
 
         self.sign_in_button_hbox.addWidget(self.keep_signed_in)
 
-        self.Sign_in_button = QPushButton(self.centralwidget)
+        self.Sign_in_button = QPushButton(MainWindow)
         self.Sign_in_button.setObjectName(u"Sign_in_button")
         self.Sign_in_button.setMinimumSize(QSize(75, 35))
         self.Sign_in_button.setMaximumSize(QSize(75, 35))
@@ -122,7 +131,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, -1, -1, -1)
-        self.forgot_password = QLabel(self.centralwidget)
+        self.forgot_password = QLabel(MainWindow)
         self.forgot_password.setObjectName(u"forgot_password")
         font3 = QFont()
         font3.setFamily(u"Segoe UI Symbol")
@@ -131,7 +140,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.forgot_password)
 
-        self.sign_up_free = QLabel(self.centralwidget)
+        self.sign_up_free = QLabel(MainWindow)
         self.sign_up_free.setObjectName(u"sign_up_free")
         self.sign_up_free.setFont(font3)
         self.sign_up_free.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
@@ -144,7 +153,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.email_pw_vbox)
 
-        MainWindow.setCentralWidget(self.centralwidget)
+
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+
 
         self.retranslateUi(MainWindow)
 
@@ -155,10 +166,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.logo.setText("")
         self.sign_in.setText(QCoreApplication.translate("MainWindow", u"Sign In", None))
-        self.password_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your password", None))
         self.email_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your email", None))
+        self.password_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your password", None))
         self.keep_signed_in.setText(QCoreApplication.translate("MainWindow", u"Keep me signed in", None))
         self.Sign_in_button.setText(QCoreApplication.translate("MainWindow", u"Sign In", None))
         self.forgot_password.setText(QCoreApplication.translate("MainWindow", u"Forgot Password?", None))
         self.sign_up_free.setText(QCoreApplication.translate("MainWindow", u"Sign Up Free", None))
     # retranslateUi
+
