@@ -12,19 +12,18 @@ class VLine(QFrame):
         self.setFrameShape(self.VLine)
         self.setFrameStyle(self.Sunken)
 
-class Grabber(QWidget):
+class ImageBox(QWidget):
     dirty = True
-    def __init__(self, x, y, w, h, inputs_queue, update_position_queue, update_position_lock):
-        QWidget.__init__(self)   
+    def __init__(self, start_box_x1, start_box_y1, start_box_x2, start_box_y2, inputs_queue, update_position_lock):
+        super(ImageBox, self).__init__()   
         self.setWindowTitle('ReLuu FaceReader')
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
+        self.start_box_x1 = start_box_x1
+        self.start_box_y1 = start_box_y1
+        self.start_box_x2 = start_box_x2
+        self.start_box_y2 = start_box_y2
         self.inputs_queue = inputs_queue
-        self.update_position_queue = update_position_queue
         self.update_position_lock = update_position_lock
-        self.setGeometry(self.x, self.y, self.w, self.h)
+        self.setGeometry(self.start_box_x1, self.start_box_y1, self.start_box_x2, self.start_box_y2)
         self.acceptDrops()
         # Window stays on top, and the other 2 combine to remove the min/close/expand buttons
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.CustomizeWindowHint | Qt.WindowTitleHint)        
@@ -91,7 +90,7 @@ class Grabber(QWidget):
         
 
     def resizeEvent(self, event):
-        super(Grabber, self).resizeEvent(event)
+        super(ImageBox, self).resizeEvent(event)
         # the first resizeEvent is called *before* any first-time showEvent and
         # paintEvent, there's no need to update the mask until then; see below
         if not self.dirty:
@@ -100,13 +99,13 @@ class Grabber(QWidget):
 
 
     def moveEvent(self, event):
-        super(Grabber, self).moveEvent(event)
+        super(ImageBox, self).moveEvent(event)
         if not self.dirty:
             # print("Moving it")
             self.updateMask()
 
     def paintEvent(self, event):
-        super(Grabber, self).paintEvent(event)
+        super(ImageBox, self).paintEvent(event)
         # on Linux the frameGeometry is actually updated "sometime" after show()
         # is called; on Windows and MacOS it *should* happen as soon as the first
         # non-spontaneous showEvent is called (programmatically called: showEvent
@@ -128,9 +127,8 @@ class Grabber(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     queue = Queue()
-    queue2 = Queue()
     abx = threading.Lock()
-    grabber = Grabber(1000, 600, 300, 400, queue, queue2, abx)
+    grabber = ImageBox(1000, 600, 300, 400, queue, abx)
     # grabber.show()
     sys.exit(app.exec_())
 

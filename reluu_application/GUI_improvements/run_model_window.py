@@ -56,15 +56,13 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
 class RunModelWindow(QMainWindow):
     default_title = "ReLuu FaceReader"
     face_box = None
-    face_reader = None
 
     def __init__(self, x,y,w,h, start_position=(200, 300, 550, 500)):
         super().__init__()   
-        self.drawing = False
+        # self.drawing = False
         self.brushSize = 1
         self.brushColor = Qt.red
         self.lastPoint = QPoint()
-        self.total_snips = 0
         self.setWindowTitle(RunModelWindow.default_title)
         self.box_x = None
         self.box_y = None
@@ -106,19 +104,9 @@ class RunModelWindow(QMainWindow):
         self._graph_timer.setInterval(2000)
         self._graph_timer.timeout.connect(self.create_graph)
 
-        # self.delete_timer = QTimer()
-        # self.delete_timer.setInterval(1500)        
-        # self.delete_timer.timeout.connect(self.print_cords_forme)
-        # self.delete_timer.start()
-
-        # self.delete_timer2 = QTimer()
-        # self.delete_timer2.setInterval(33)        
-        # self.delete_timer2.timeout.connect(self.update_position_model_not_running)
-        # self.delete_timer2.start()
-
         # New snip
         new_snip_action = QAction("Draw Box", self)
-        new_snip_action.triggered.connect(self.__new_image_window)
+        # new_snip_action.triggered.connect(self.__new_image_window)
 
         close_box = QAction('Close Box', self)
         close_box.triggered.connect(self.__close_box)
@@ -134,10 +122,8 @@ class RunModelWindow(QMainWindow):
         self.toolbar.addAction(close_box)
         self.toolbar.addAction(run_program)
         self.toolbar.addAction(stop_program)
-
-        self.snippingTool = grab_image.SnippingWidget(self)
+        # self.snippingTool = grab_image.SnippingWidget(self)
         self.setGeometry(*start_position)
-
         self.show()
 
 
@@ -188,19 +174,19 @@ class RunModelWindow(QMainWindow):
         self.setCentralWidget(chartView)
    
 
-    def __new_image_window(self):
-        self.snippingTool.start()
+    # def __new_image_window(self):
+    #     self.snippingTool.start()
 
 
-    def __create_box(self, x,y,w,h):
-        width = w-x
-        height = h-y
-        RunModelWindow.face_box = Grabber(x,y,width,height, self.inputs_queue, self.update_position_queue, self.update_position_lock)
-        self.box_x = x
-        self.box_y = y
-        self.box_w = w
-        self.box_h = h
-        self.box_drawn_can_start = True
+    # def __create_box(self, x,y,w,h):
+    #     width = w-x
+    #     height = h-y
+    #     RunModelWindow.face_box = Grabber(x,y,width,height, self.inputs_queue, self.update_position_queue, self.update_position_lock)
+    #     self.box_x = x
+    #     self.box_y = y
+    #     self.box_w = w
+    #     self.box_h = h
+    #     self.box_drawn_can_start = True
 
 
     def __start_program(self):
@@ -227,27 +213,6 @@ class RunModelWindow(QMainWindow):
             print("---Cannot start program, box not drawn---")
         else:
             print("---model running___")
-
-
-    # Only used when the model is not running
-    # def update_position_model_not_running(self):
-    #     if not global_model_start:
-    #         if not self.inputs_queue.empty():
-    #             message = self.inputs_queue.get()
-    #             print(f'message:', message)
-    #             if "UPDATE" in message:
-    #                 new_cords = message.split(" ")
-    #                 self.box_x = int(new_cords[1])
-    #                 self.box_y = int(new_cords[2])
-    #                 self.box_w = self.box_x+int(new_cords[3])
-    #                 self.box_h = self.box_y+int(new_cords[4])
-    
-
-    # def print_cords_forme(self):
-    #     if not global_model_start:
-    #         print("printing cords")
-    #         print(self.box_x, self.box_y, self.box_w, self.box_h)  
-
 
     def calculate_emotion(self):
         if not self.outputs_queue.empty():
@@ -291,23 +256,6 @@ class RunModelWindow(QMainWindow):
         self.face_surprise_fear = r5
 
         self.emotion_set.append([self.face_anger_digust, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
-
-        # self.face_confidence_level = numpy.zeros((1,5))
-        # self.face_confidence_entry_count = 0
-
-        # new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
-        # print(str(new_graph_value))
-
-        # self.face_anger_digust = new_graph_value[0][0]
-        # self.face_happy = new_graph_value[0][1]
-        # self.face_neutral = new_graph_value[0][2]
-        # self.face_sadness = new_graph_value[0][3]
-        # self.face_surprise_fear = new_graph_value[0][4]
-
-        # self.emotion_set.append([self.face_anger_digust, self.face_happy, self.face_neutral, self.face_sadness, self.face_surprise_fear])
-
-        # self.face_confidence_level = numpy.zeros((1,5))
-        # self.face_confidence_entry_count = 0
         self.face_lock.release()
 
     def mousePressEvent(self, event):
@@ -334,6 +282,6 @@ class RunModelWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    mainRunModelWindow = RunModelWindow()
+    mainRunModelWindow = RunModelWindow(1,2,3,4)
     sys.exit(app.exec_())
 

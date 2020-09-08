@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 from PIL import ImageGrab
 from PySide2 import QtWidgets, QtCore, QtGui
@@ -5,7 +7,8 @@ from PySide2.QtCore import Qt
 import pyautogui
 
 import login_menu
-import run_model_window
+# import run_model_window
+import run_model_improved
 
 class GrabImage(QtWidgets.QWidget):
     is_snipping = False
@@ -84,5 +87,12 @@ class GrabImage(QtWidgets.QWidget):
         self.close()
         # self.model_window = running_model.RunningModel()
         # self.model_window.show()
-        self.model_window = run_model_window.Menu()
+        abc = self.x22 - self.x11
+        abd = self.y22 - self.y11
+        self.model_window = run_model_improved.RunModelWindow(self.x11, self.y11, abc, abd)
 
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    abc = GrabImage()
+    abc.start_grab()
+    sys.exit(app.exec_())
