@@ -51,6 +51,7 @@ def model_worker(inputs_queue, outputs_queue,x,y,w,h):
                         else:
                             continue
                     else:
+                        # take image here, then input that into the functions
                         model.run(x1, y1, width, height, count)
                         count += 1 
                         if count > 200:

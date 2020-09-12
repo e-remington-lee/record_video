@@ -32,7 +32,6 @@ class FaceReader():
         # self.begin_session_allocate_memory()
         # self.model = tf.keras.models.load_model("faceReader\\xNet_v3.2.0_SGD_128x128_8028_8063")
         import os 
-        print(os.listdir())
         self.model = tflite.Interpreter("tflite_model\\optimized_model_v4.0.0_7779.tflite")
         self.path = "output\\"
         self.outputs_queue = outputs_queue

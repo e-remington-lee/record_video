@@ -117,9 +117,9 @@ def make_model():
 
     # x = tf.keras.layers.Dense(1024, activation="relu", kernel_initializer='he_normal')(x)
     x = tf.keras.layers.Dense(1024, activation="relu", kernel_initializer='he_normal', bias_initializer="he_normal", kernel_regularizer=regularizers.l2(L2_WEIGHT_DECAY))(x)
-    x = tf.keras.layers.Dropout(0.5)(x)
+    x = tf.keras.layers.Dropout(0.3)(x)
     x = tf.keras.layers.Dense(512, activation="relu", kernel_initializer='he_normal', bias_initializer="he_normal")(x)
-    x = tf.keras.layers.Dropout(0.5)(x)
+    x = tf.keras.layers.Dropout(0.3)(x)
     x = tf.keras.layers.Dense(5, activation="softmax", kernel_initializer='he_normal', bias_initializer="he_normal")(x)
 
     model = Model(input_layer, x, name='xNet_reg')
@@ -131,7 +131,7 @@ model = make_model()
 model.summary()
 
 
-model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, decay=0.00004), loss='categorical_crossentropy', metrics=['acc', tf.keras.metrics.Precision(), tf.keras.metrics.Recall()])
+model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.015, momentum=0.9, decay=0.00004), loss='categorical_crossentropy', metrics=['acc', tf.keras.metrics.Precision(), tf.keras.metrics.Recall()])
 
 TRAINING_DIR = "../labeled_data/emotions_5/train/"
 train_datagen = ImageDataGenerator(
@@ -145,12 +145,12 @@ train_datagen = ImageDataGenerator(
       # fill_mode='nearest')
 
 train_generator = train_datagen.flow_from_directory(TRAINING_DIR, target_size=(i_s,i_s), 
-batch_size=64, class_mode="categorical")
+batch_size=64, class_mode="categorical", shuffle=True)
 
 VALIDATION_DIR = "../labeled_data/emotions_5/validation/"
 validation_datagen = ImageDataGenerator(rescale=1./255)
 
-validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR, target_size=(i_s,i_s),batch_size=64, class_mode="categorical")
+validation_generator = validation_datagen.flow_from_directory(VALIDATION_DIR, target_size=(i_s,i_s),batch_size=64, class_mode="categorical", shuffle=True)
 
 check_points = "../checkpoint/checkpoint.hb/"
 check_point_dir = os.path.dirname(check_points)
@@ -162,7 +162,7 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="./log_dir")
 lambda_callback_1 = tf.keras.callbacks.LambdaCallback(on_epoch_begin=lambda batch, logs : tf.keras.backend.clear_session())
 lambda_callback_2 = tf.keras.callbacks.LambdaCallback(on_epoch_begin=lambda batch, logs : make_model())
 
-# model = tf.keras.models.load_model("..\\faceReader\\xNet_v4.0.0_SGD_80x80_7779\\")
+model = tf.keras.models.load_model("..\\faceReader\\xNet_v4.1.1_SGD_80x80_7679")
 
 history = model.fit(train_generator,
                             epochs=150,
@@ -170,7 +170,7 @@ history = model.fit(train_generator,
                             validation_data=validation_generator,
                             callbacks=[cp_callback, lambda_callback_1, lambda_callback_2])
 
-faceReader_dir = "..\\faceReader\\xNet_v4.0.1_SGD_80x80_night\\"
+faceReader_dir = "..\\faceReader\\xNet_v4.2.0_SGD_80x80_night\\"
 
 tf.saved_model.save(model, faceReader_dir)
 
