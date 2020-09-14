@@ -1,5 +1,3 @@
-
-
 # https://www.learnpyqt.com/courses/custom-widgets/bitmap-graphics/
 # https://www.learnpyqt.com/courses/custom-widgets/creating-your-own-custom-widgets/
 
@@ -13,7 +11,9 @@
 # https://stackoverflow.com/questions/50550089/qt-animating-qpixmap
 
 # multi animation
-https://stackoverflow.com/questions/55640384/embedding-second-animated-graph-to-pyqt5-gui
+# https://stackoverflow.com/questions/55640384/embedding-second-animated-graph-to-pyqt5-gui
+
+# parallel group https://doc.qt.io/qt-5/animation-overview.html
 
 from matplotlib.figure import Figure
 from matplotlib import animation
