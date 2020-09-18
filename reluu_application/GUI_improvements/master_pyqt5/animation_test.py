@@ -9,7 +9,7 @@ class RMW(QtWidgets.QWidget):
         self.ball_layout = QtWidgets.QHBoxLayout()
         self.label = QtWidgets.QLabel()
         cv = QtGui.QPixmap(500,500)
-        cv.fill(QtGui.QColor("white"))
+        cv.fill(QtGui.QColor(150,200,60, 255))
 
         self.label.setPixmap(cv)
 
@@ -37,6 +37,10 @@ class RMW(QtWidgets.QWidget):
     
 
     def push(self):
+        cv = QtGui.QPixmap(50,50)
+        
+        cv.fill(QtGui.QColor(0,0,255, 255))
+        self.label.setPixmap(cv)
         print("push button")
 
 

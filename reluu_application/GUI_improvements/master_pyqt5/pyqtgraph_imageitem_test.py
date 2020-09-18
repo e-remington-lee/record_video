@@ -14,9 +14,9 @@ win.setWindowTitle('pyqtgraph example: ImageItem')
 view = win.addViewBox()
 
 ## lock the aspect ratio so pixels are always square
-view.setAspectLocked(True)
+# view.setAspectLocked(True)
 
-## Create image item
+# ## Create image item
 img = pg.ImageItem(border='w')
 view.addItem(img)
 pos = np.array([0., 1., 0.5, 0.25, 0.75])
@@ -25,39 +25,35 @@ cmap = pg.ColorMap(pos, color)
 lut = cmap.getLookupTable(0.0, 1.0, 256)
 
 img.setLookupTable(lut)
-# img.setLevels([-50,40])
+img.setImage(lut)
+# # img.setLevels([-50,40])
 
 
-## Set initial view bounds
+# ## Set initial view bounds
 view.setRange(QtCore.QRectF(0, 0, 600, 600))
 
-## Create random image
+# ## Create random image
 data = np.random.normal(size=(15, 600, 600), loc=1024, scale=64).astype(np.uint16)
 i = 0
-
-updateTime = ptime.time()
-fps = 0
-
-# I want to just randomly a circle
 # img.setImage(data[i])
 
-def updateData():
-    global img, data, i, updateTime, fps
+# def updateData():
+#     global img, data, i, updateTime, fps
 
-    ## Display the data
-    img.setImage(data[i])
-    i = (i+1) % data.shape[0]
+#     ## Display the data
+#     img.setImage(data[i])
+#     i = (i+1) % data.shape[0]
 
-    QtCore.QTimer.singleShot(1, updateData)
-    now = ptime.time()
-    fps2 = 1.0 / (now-updateTime)
-    updateTime = now
-    fps = fps * 0.9 + fps2 * 0.1
+#     QtCore.QTimer.singleShot(1, updateData)
+#     now = ptime.time()
+#     fps2 = 1.0 / (now-updateTime)
+#     updateTime = now
+#     fps = fps * 0.9 + fps2 * 0.1
     
     #print "%0.1f fps" % fps
     
 
-updateData()
+# updateData()
 
 ## Start Qt event loop unless running in interactive mode.
 if __name__ == '__main__':
