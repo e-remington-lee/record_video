@@ -1,0 +1,1 @@
+# the parallel animation function looks like you could use a linked list??

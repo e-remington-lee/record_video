@@ -5,7 +5,6 @@ from PySide2 import QtWidgets, QtGui, QtCore, QtCharts
 class RMW(QtWidgets.QWidget):
     def __init__(self):
         super(RMW, self).__init__()
-    
         self.layout = QtWidgets.QVBoxLayout()
         self.ball_layout = QtWidgets.QHBoxLayout()
         self.label = QtWidgets.QLabel()

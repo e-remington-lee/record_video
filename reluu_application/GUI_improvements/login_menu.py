@@ -22,8 +22,8 @@ class LoginWindow(QtWidgets.QWidget, Ui_MainWindow):
             self.close()
             self.main_menu = MainMenu()
             self.main_menu.show()
-        else: 
-            print("failed to login")            
+        else:
+            print("failed to login")     
 
 
 class MainMenu(QtWidgets.QWidget, Ui_mainMenu):
