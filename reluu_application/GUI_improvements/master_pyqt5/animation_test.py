@@ -39,7 +39,7 @@ class RMW(QtWidgets.QWidget):
     def push(self):
         cv = QtGui.QPixmap(50,50)
         
-        cv.fill(QtGui.QColor(0,0,255, 255))
+        cv.fill(QtGui.QColor(255,255,255, 255))
         self.label.setPixmap(cv)
         print("push button")
 
