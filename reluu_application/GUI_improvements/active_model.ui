@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
-    <height>304</height>
+    <width>300</width>
+    <height>510</height>
    </rect>
   </property>
   <property name="palette">
@@ -89,24 +89,6 @@
          </property>
         </layout>
        </item>
-       <item>
-        <layout class="QVBoxLayout" name="detailed_view_layout">
-         <item alignment="Qt::AlignHCenter">
-          <widget class="QCheckBox" name="detailed_view_checkbox">
-           <property name="text">
-            <string>Detailed View</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="detailed_info_layout">
        <item>
         <layout class="QVBoxLayout" name="warning_layout" stretch="0,0">
          <property name="spacing">
@@ -297,6 +279,28 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="detailed_view_layout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMaximumSize</enum>
+         </property>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QCheckBox" name="detailed_view_checkbox">
+           <property name="font">
+            <font>
+             <family>Segoe UI Symbol</family>
+            </font>
+           </property>
+           <property name="text">
+            <string>Show Detailed View</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
           </widget>
          </item>

@@ -7,7 +7,7 @@ with pyside2 files, the original file is corrupted somehow, so just copy and pas
 
 pyside2-uic "reluu_application\\GUI_improvements\\login_layout_qwidget.ui" -o "login_menu_qtd.py"
 pyside2-uic "reluu_application\\GUI_improvements\\main_menu.ui" -o "main_menu_qtd.py"
-pyside2-uic "reluu_application\\GUI_improvements\\active_model.ui" -o "active_model.py"
+pyside2-uic "reluu_application\\GUI_improvements\\active_model.ui" -o "active_model2.py"
 
 background color: #f3fcff
 
