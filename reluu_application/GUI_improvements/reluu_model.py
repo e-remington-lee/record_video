@@ -19,27 +19,21 @@ import multiprocessing
 import cv2.cv2 as cv2
 from PIL import ImageGrab, Image
 import tflite_runtime.interpreter as tflite
-# import tensorflow as tf
 import numpy as np
 
 
-class FaceReader():
-    debug = True
-    running = False
-    
+class ReluuModel():
+    debug = False
     def __init__(self, outputs_queue):
-        # super(FaceReader, self).__init__()
-        # self.begin_session_allocate_memory()
-        # self.model = tf.keras.models.load_model("faceReader\\xNet_v3.2.0_SGD_128x128_8028_8063")
-        import os 
-        print(os.listdir())
+        # import os 
+        # print(os.listdir())
         self.model = tflite.Interpreter("tflite_model\\optimized_model_v4.0.0_7779.tflite")
         self.path = "output\\"
         self.outputs_queue = outputs_queue
         self.front_face_cascade = cv2.CascadeClassifier("cascades\\haarcascade_frontalface_default.xml")
         self.emo = ""
 
-    def run(self, x,y,w,h, count):
+    def run(self, x,y,w,h):
         try: 
             # redesign so there is another function that does the image grab and passes those locations back to model
             # image will only find location of face once every 10/20 to speed up performance
@@ -53,7 +47,7 @@ class FaceReader():
                         cropped_face = img[y:y+h, x:x+w]
                         cropped_face = np.array(cropped_face)
 
-                        if FaceReader.debug:
+                        if ReluuModel.debug:
                             im = Image.fromarray(cropped_face)
 
                         cropped_face = cropped_face * 1.0/255
@@ -62,12 +56,12 @@ class FaceReader():
                         r_message = (prediction,)
                         self.outputs_queue.put(r_message)
 
-                        if FaceReader.debug:
-                            txt = self.emo+str(prediction)+"_predicted"+str(count)+".jpg"
+                        if ReluuModel.debug:
+                            txt = self.emo+str(prediction)+"_predicted.jpg"
                             im.save(self.path+txt, "JPEG")
                 else:
-                    if FaceReader.debug:
-                        txt = f"No Face_{str(count)}+.jpg"
+                    if ReluuModel.debug:
+                        txt = f"No Face.jpg"
                         no_face = Image.fromarray(img)
                         no_face.save(self.path+txt, "JPEG")
                 # Do I need this every loop?
@@ -84,22 +78,6 @@ class FaceReader():
         final_image = cv2.resize(face, (size,size))
         final_image = np.expand_dims(final_image, 0)
         
-        # self.emo = ""
-        # if result[0] > 0.3:
-        #     self.emo += "anger_disgust" 
-        # if result[1] > 0.3:
-        #     self.emo += "joy"
-        # if result[2] > 0.3:
-        #     self.emo += "neutral" 
-        # if result[3] > 0.3:
-        #     self.emo += "sadness"
-        # if result[4] > 0.3:
-        #     self.emo += "surprise_fear"
-        # if self.emo == "":
-        #     self.emo = "No result"
-        # acc = self.model.predict([final_image])
-         # result = acc[0]
-
         self.model.allocate_tensors()
 
         # Get input and output tensors.

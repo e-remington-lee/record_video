@@ -8,7 +8,7 @@ import pyautogui
 
 import login_menu
 # import run_model_window
-import run_model_improved
+import running_model_v2
 
 class GrabImage(QtWidgets.QWidget):
     is_snipping = False
@@ -82,14 +82,11 @@ class GrabImage(QtWidgets.QWidget):
         print(self.x11, self.y11, self.x22, self.y22)
         self.repaint()
         QtWidgets.QApplication.processEvents()
-        # QtWidgets.QApplication.processEvents()
-        # self.parent._Menu__create_box(x1, y1, x2, y2)
         self.close()
-        # self.model_window = running_model.RunningModel()
-        # self.model_window.show()
-        abc = self.x22 - self.x11
-        abd = self.y22 - self.y11
-        self.model_window = run_model_improved.RunModelWindow(self.x11, self.y11, abc, abd)
+        # width = self.x22 - self.x11
+        # height = self.y22 - self.y11
+        # We put absolute cordinates here bc Pillow uses absolute cordinates
+        self.model_window = running_model_v2.ActiveModelWindow(self.x11, self.y11, self.x22, self.y22)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

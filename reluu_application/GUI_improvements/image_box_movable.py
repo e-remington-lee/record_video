@@ -56,11 +56,6 @@ class ImageBox(QWidget):
         width = grabGeometry.getRect()[2]
         height = grabGeometry.getRect()[3]
         message = f"UPDATE {x1} {y1} {width} {height}"
-        # if not self.update_position_queue.empty():
-        #     _ = self.update_position_queue.get()
-        #     self.update_position_queue.put(message)
-        # else:
-        #     self.update_position_queue.put(message)
             
         self.inputs_queue.put(message)
 
@@ -94,14 +89,12 @@ class ImageBox(QWidget):
         # the first resizeEvent is called *before* any first-time showEvent and
         # paintEvent, there's no need to update the mask until then; see below
         if not self.dirty:
-            # print("rezise event")
             self.updateMask()
 
 
     def moveEvent(self, event):
         super(ImageBox, self).moveEvent(event)
         if not self.dirty:
-            # print("Moving it")
             self.updateMask()
 
     def paintEvent(self, event):

@@ -50,6 +50,6 @@ class MainMenu(QtWidgets.QWidget, Ui_mainMenu):
         
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = LoginWindow()
+    window = MainMenu()
     window.show()
     sys.exit(app.exec_())
