@@ -11,7 +11,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
-from active_model2 import Ui_active_model
+from active_model import Ui_active_model
 import login_menu
 import image_box_movable
 import reluu_model
