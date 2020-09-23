@@ -53,7 +53,7 @@ class ReluuModel():
                         cropped_face = cropped_face * 1.0/255
                         # perform 10-crop validation?                    
                         prediction = self.predict(cropped_face)
-                        r_message = (prediction,)
+                        r_message = (prediction)
                         self.outputs_queue.put(r_message)
 
                         if ReluuModel.debug:

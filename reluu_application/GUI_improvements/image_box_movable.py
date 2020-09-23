@@ -2,7 +2,7 @@ import sys
 import threading
 from PySide2.QtCore import Qt, QPoint
 from PySide2.QtWidgets import QApplication, QFrame, QWidget, QHBoxLayout, QVBoxLayout, QSizePolicy, QPushButton, QStyle, QSpinBox, QLabel
-from PySide2.QtGui import QRegion
+from PySide2.QtGui import QRegion, QIcon
 
 from multiprocessing import Queue
 
@@ -16,7 +16,9 @@ class ImageBox(QWidget):
     dirty = True
     def __init__(self, start_box_x1, start_box_y1, start_box_x2, start_box_y2, inputs_queue, update_position_lock):
         super(ImageBox, self).__init__()   
-        self.setWindowTitle('ReLuu FaceReader')
+        self.setWindowTitle('ReLuu')
+        icon = QIcon("reluu_application/GUI_improvements/logo_transparent_background.png")
+        self.setWindowIcon(icon)
         self.start_box_x1 = start_box_x1
         self.start_box_y1 = start_box_y1
         self.start_box_x2 = start_box_x2
@@ -99,16 +101,6 @@ class ImageBox(QWidget):
 
     def paintEvent(self, event):
         super(ImageBox, self).paintEvent(event)
-        # on Linux the frameGeometry is actually updated "sometime" after show()
-        # is called; on Windows and MacOS it *should* happen as soon as the first
-        # non-spontaneous showEvent is called (programmatically called: showEvent
-        # is also called whenever a window is restored after it has been
-        # minimized); we can assume that all that has already happened as soon as
-        # the first paintEvent is called; before then the window is flagged as
-        # "dirty", meaning that there's no need to update its mask yet.
-        # Once paintEvent has been called the first time, the geometries should
-        # have been already updated, we can mark the geometries "clean" and then
-        # actually apply the mask.
         if self.dirty:
             self.updateMask()
             self.dirty = False
