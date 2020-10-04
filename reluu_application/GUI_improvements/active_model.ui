@@ -75,7 +75,23 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>ReLuu</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QLineEdit {
+ border-radius: 5px;
+border: 0.5px solid gray;
+}
+
+QPushButton{
+border-radius:5px;
+background-color: #d5f6ff;
+border: 0.5px solid gray;
+}
+
+QPushButton::hover {
+background-color: #befeff
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

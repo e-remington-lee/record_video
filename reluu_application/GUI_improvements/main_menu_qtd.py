@@ -3,16 +3,13 @@
 ################################################################################
 ## Form generated from reading UI file 'main_menu.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.0
+## Created by: Qt User Interface Compiler version 5.15.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
-    QPixmap, QRadialGradient)
+from PySide2.QtCore import *
+from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
@@ -20,7 +17,7 @@ class Ui_mainMenu(object):
     def setupUi(self, mainMenu):
         if not mainMenu.objectName():
             mainMenu.setObjectName(u"mainMenu")
-        mainMenu.resize(400, 300)
+        mainMenu.resize(400, 316)
         palette = QPalette()
         brush = QBrush(QColor(255, 255, 255, 255))
         brush.setStyle(Qt.SolidPattern)
@@ -54,7 +51,7 @@ class Ui_mainMenu(object):
         self.logo_mainMenu = QLabel(mainMenu)
         self.logo_mainMenu.setObjectName(u"logo_mainMenu")
         self.logo_mainMenu.setMaximumSize(QSize(150, 150))
-        self.logo_mainMenu.setPixmap(QPixmap(u"reluu_application\\GUI_improvements\\logo_transparent_background.png"))
+        self.logo_mainMenu.setPixmap(QPixmap(u"logo_transparent_background.png"))
         self.logo_mainMenu.setScaledContents(True)
 
         self.logo_layout_mainMenu.addWidget(self.logo_mainMenu, 0, Qt.AlignHCenter)
@@ -62,9 +59,9 @@ class Ui_mainMenu(object):
 
         self.vbox_mainMenu.addLayout(self.logo_layout_mainMenu)
 
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(30, -1, 30, -1)
+        self.button_layout = QVBoxLayout()
+        self.button_layout.setObjectName(u"button_layout")
+        self.button_layout.setContentsMargins(30, -1, 30, -1)
         self.start_model_button = QPushButton(mainMenu)
         self.start_model_button.setObjectName(u"start_model_button")
         self.start_model_button.setMinimumSize(QSize(200, 0))
@@ -75,13 +72,7 @@ class Ui_mainMenu(object):
         font.setWeight(50)
         self.start_model_button.setFont(font)
 
-        self.verticalLayout_2.addWidget(self.start_model_button)
-
-        self.account_link_button = QPushButton(mainMenu)
-        self.account_link_button.setObjectName(u"account_link_button")
-        self.account_link_button.setFont(font)
-
-        self.verticalLayout_2.addWidget(self.account_link_button)
+        self.button_layout.addWidget(self.start_model_button)
 
         self.sign_out_button = QPushButton(mainMenu)
         self.sign_out_button.setObjectName(u"sign_out_button")
@@ -90,13 +81,14 @@ class Ui_mainMenu(object):
         font1.setPointSize(14)
         self.sign_out_button.setFont(font1)
 
-        self.verticalLayout_2.addWidget(self.sign_out_button)
+        self.button_layout.addWidget(self.sign_out_button)
 
 
-        self.vbox_mainMenu.addLayout(self.verticalLayout_2)
+        self.vbox_mainMenu.addLayout(self.button_layout)
 
         self.spacing_layout_mainMenu = QHBoxLayout()
         self.spacing_layout_mainMenu.setObjectName(u"spacing_layout_mainMenu")
+        self.spacing_layout_mainMenu.setContentsMargins(-1, 10, -1, -1)
 
         self.vbox_mainMenu.addLayout(self.spacing_layout_mainMenu)
 
@@ -110,10 +102,9 @@ class Ui_mainMenu(object):
     # setupUi
 
     def retranslateUi(self, mainMenu):
-        mainMenu.setWindowTitle(QCoreApplication.translate("mainMenu", u"Form", None))
+        mainMenu.setWindowTitle(QCoreApplication.translate("mainMenu", u"ReLuu", None))
         self.logo_mainMenu.setText("")
         self.start_model_button.setText(QCoreApplication.translate("mainMenu", u"Start", None))
-        self.account_link_button.setText(QCoreApplication.translate("mainMenu", u"Account", None))
-        self.sign_out_button.setText(QCoreApplication.translate("mainMenu", u"Sign Out", None))
+        self.sign_out_button.setText(QCoreApplication.translate("mainMenu", u"Exit", None))
     # retranslateUi
 

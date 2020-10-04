@@ -65,6 +65,12 @@ class ActiveModelWindow(QtWidgets.QWidget, Ui_active_model):
         self.setWindowTitle('ReLuu')
         icon = QtGui.QIcon("reluu_application/GUI_improvements/logo_transparent_background.png")
         self.setWindowIcon(icon)
+
+        qrect = self.frameGeometry()
+        cp = QtWidgets.QDesktopWidget().availableGeometry().right()
+        qrect.moveRight(cp)
+        self.move(qrect.bottomLeft())
+        
         self.face_box_x = face_box_x
         self.face_box_y = face_box_y
         self.face_box_w = face_box_w
@@ -111,6 +117,7 @@ class ActiveModelWindow(QtWidgets.QWidget, Ui_active_model):
 
         self.stop_session_button.clicked.connect(self.stop_model)
         self.detailed_view_checkbox.stateChanged.connect(self.show_details)
+        self.detailed_view_checkbox.setChecked(True)
         self.warning_label1.setHidden(True)
         self.warning_label2.setHidden(True)
         self.show()
@@ -160,7 +167,7 @@ class ActiveModelWindow(QtWidgets.QWidget, Ui_active_model):
         self.emotion_lock.acquire()
         new_graph_value = self.face_confidence_level / self.face_confidence_entry_count
         self.detailed_view.plot(new_graph_value)
-        colormap_values = np.array([[-1, 1, 0, -0.2, -0.2]])
+        colormap_values = np.array([[-1, 1, 0, -0.7, -0.7]])
         step1 = np.multiply(new_graph_value,colormap_values)
         colormap_result = np.sum(step1)
         self.emotion_icon.plot(colormap_result)

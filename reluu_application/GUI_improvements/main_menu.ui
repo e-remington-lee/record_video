@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>307</height>
+    <height>316</height>
    </rect>
   </property>
   <property name="palette">
@@ -75,7 +75,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>ReLuu</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QLineEdit {
@@ -149,21 +149,6 @@ background-color: #befeff
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="account_link_button">
-         <property name="font">
-          <font>
-           <family>Segoe UI Symbol</family>
-           <pointsize>14</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Account</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="sign_out_button">
          <property name="font">
           <font>
@@ -172,7 +157,7 @@ background-color: #befeff
           </font>
          </property>
          <property name="text">
-          <string>Sign Out</string>
+          <string>Exit</string>
          </property>
         </widget>
        </item>
