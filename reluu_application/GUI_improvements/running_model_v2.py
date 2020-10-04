@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
 from active_model import Ui_active_model
-import login_menu
+import Reluu
 import image_box_movable
 import reluu_model
 
@@ -184,8 +184,8 @@ class ActiveModelWindow(QtWidgets.QWidget, Ui_active_model):
         self.graph_timer.stop()
         self.no_face_warning_timer.stop()
         self.close()
-        self.login_menu = login_menu.MainMenu()
-        self.login_menu.show()
+        self.Reluu = Reluu.MainMenu()
+        self.Reluu.show()
 
     def closeEvent(self, event):
         self.stop_model()

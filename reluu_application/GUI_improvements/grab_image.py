@@ -6,7 +6,7 @@ from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtCore import Qt
 import pyautogui
 
-import login_menu
+import Reluu
 # import run_model_window
 import running_model_v2
 
