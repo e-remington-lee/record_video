@@ -91,14 +91,22 @@ class Ui_mainMenu(object):
         font.setBold(False)
         font.setWeight(50)
         self.start_model_button.setFont(font)
+        self.start_model_button.setToolTipDuration(-1)
 
         self.button_layout.addWidget(self.start_model_button)
 
-        self.sign_out_button = QPushButton(mainMenu)
-        self.sign_out_button.setObjectName(u"sign_out_button")
+        self.feedback_button = QPushButton(mainMenu)
+        self.feedback_button.setObjectName(u"feedback_button")
+        self.feedback_button.setMinimumSize(QSize(200, 0))
         font1 = QFont()
         font1.setFamily(u"Segoe UI Symbol")
         font1.setPointSize(14)
+        self.feedback_button.setFont(font1)
+
+        self.button_layout.addWidget(self.feedback_button)
+
+        self.sign_out_button = QPushButton(mainMenu)
+        self.sign_out_button.setObjectName(u"sign_out_button")
         self.sign_out_button.setFont(font1)
 
         self.button_layout.addWidget(self.sign_out_button)
@@ -124,8 +132,11 @@ class Ui_mainMenu(object):
     def retranslateUi(self, mainMenu):
         mainMenu.setWindowTitle(QCoreApplication.translate("mainMenu", u"ReLuu", None))
         self.logo_mainMenu.setText("")
+#if QT_CONFIG(tooltip)
+        self.start_model_button.setToolTip("")
+#endif // QT_CONFIG(tooltip)
         self.start_model_button.setText(QCoreApplication.translate("mainMenu", u"Start", None))
+        self.feedback_button.setText(QCoreApplication.translate("mainMenu", u"Submit Feedback", None))
         self.sign_out_button.setText(QCoreApplication.translate("mainMenu", u"Exit", None))
     # retranslateUi
-
 

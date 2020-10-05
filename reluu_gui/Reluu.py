@@ -69,6 +69,7 @@ class MainMenu(QtWidgets.QWidget, Ui_mainMenu):
 
         self.start_model_button.clicked.connect(self.start_model)
         self.sign_out_button.clicked.connect(self.logout)
+        self.feedback_button.clicked.connect(lambda: webbrowser.open("https://docs.google.com/forms/d/e/1FAIpQLScSYBSxaigZS0ypuA9Vipbh53PkL7ZYMB-WkKcSbVncqtt2dA/viewform"))
         self.abc = grab_image.GrabImage()
 
     def start_model(self):
