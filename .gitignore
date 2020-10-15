@@ -38,6 +38,8 @@ utility_functions/shape_predictor_68_face_landmarks.dat
 keep_output
 CMU_MOSEI
 CMU-MultimodalSDK-master
+cmumosi
+parse_dataset_labels/cmumosi
 
 FERG_DB_256
 emotion_model.model
