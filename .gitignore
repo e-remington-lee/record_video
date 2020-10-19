@@ -39,6 +39,11 @@ keep_output
 CMU_MOSEI
 CMU-MultimodalSDK-master
 cmumosi
+cmumosei_raw
+cmumosei_labels
+cmumosei_highlevel
+word_aligned_highlevel
+final_aligned
 parse_dataset_labels/cmumosi
 
 FERG_DB_256
