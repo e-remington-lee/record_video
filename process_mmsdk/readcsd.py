@@ -40,3 +40,4 @@ print (dataset.computational_sequences.keys())
 # dataset["All Labels.csd"].data['r13W4H8ZhqI[1]']['features'].value prints the np.array value
 # says these are the labels labels:
 	# dimensions=["sentiment","happy","sad","anger","surprise","disgust","fear"]
+    # dataset["All Labels.csd"].data['266791[14]']['intervals'][:] -- time intervals of video

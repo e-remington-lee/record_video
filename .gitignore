@@ -45,6 +45,7 @@ cmumosei_highlevel
 word_aligned_highlevel
 final_aligned
 parse_dataset_labels/cmumosi
+process_mmsdk/tst
 
 FERG_DB_256
 emotion_model.model
