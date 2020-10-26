@@ -37,6 +37,7 @@ process_mmsdk/mosei_dataset.csv
 databases
 labeled_data
 faceReader
+utility_functions/shape_predictor_68_face_landmarks.dat
 keep_output
 CMU_MOSEI
 CMU-MultimodalSDK-master
