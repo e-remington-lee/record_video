@@ -1,3 +1,6 @@
+'''
+This files parses the full videoes to the segmented ones. We do this so the labels in the open_face.csv match what we have
+'''
 import os
 import sys
 import csv 

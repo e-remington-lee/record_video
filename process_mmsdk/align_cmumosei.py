@@ -1,7 +1,6 @@
-# import numpy
-# # import tensorflow as tf
-# from mmsdk import mmdatasdk
-# cmumosi_highlevel=mmdatasdk.mmdataset(mmdatasdk.cmu_mosi.highlevel,'cmumosi/')
+'''
+This file is used to create the .csd files to make the csvs
+'''
 
 import mmsdk
 from mmsdk import mmdatasdk
