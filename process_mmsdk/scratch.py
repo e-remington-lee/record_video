@@ -14,3 +14,5 @@ print(list1)
 print(list2)
 print('See whether at least one number is divisible by 5 in list 1=>') 
 print(all([True, True, False]))
+
+print(int(round(0.663)))
