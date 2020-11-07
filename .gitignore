@@ -36,8 +36,14 @@ labeled_data
 faceReader
 utility_functions/shape_predictor_68_face_landmarks.dat
 keep_output
-CMU_MOSEI
-
+datasets
+CMU-MultimodalSDK-master
+cmumosei_highlevel
+cmumosei_labels
+cmumosei_raw
+process_mmsdk
+final_aligned
+word_aligned_highlevel
 FERG_DB_256
 emotion_model.model
 emotion_model_generated_faces.model
