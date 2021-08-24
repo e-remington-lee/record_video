@@ -1,18 +1,32 @@
-list1 = [] 
-list2 = [] 
-  
-# Index ranges from 1 to 10 to multiply 
-for i in range(1,11): 
-    list1.append(4*i)  
-  
-# Index to access the list2 is from 0 to 9 
-for i in range(0,10): 
-    list2 = [x%5==0 for x in list1]
-    # list2.append(list1[i]%6==0) 
+import csv
 
-print(list1)
-print(list2)
-print('See whether at least one number is divisible by 5 in list 1=>') 
-print(all([True, True, False]))
+def convert(number):
+    if number == -3:
+        return 0
+    elif number == -2:
+        return 1
+    elif number == -1:
+        return 2
+    elif number == 0:
+        return 3
+    elif number == 1:
+        return 4
+    elif number == 2:
+        return 5
+    elif number == 3:
+        return 6
 
-print(int(round(0.663)))
+
+with open("process_mmsdk/mosei_dataset_int.csv", "r") as rf:
+    csvreader = csv.reader(rf)
+    next(csvreader)
+    with open("process_mmsdk/no_sentiment.csv", "w", newline="") as wf:
+        csvwriter = csv.writer(wf)
+        headers = ["video_name_segment", "happy", "sad", "anger", "surprise", "disgust", "fear"]
+        csvwriter.writerow(headers)
+        for row in csvreader:
+            # sentiment = int(row[1])
+            # new_sentiment = convert(sentiment)
+            csvwriter.writerow([row[0], row[2], row[3], row[4], row[5], row[6], row[7]])
+
+        

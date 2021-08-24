@@ -49,6 +49,8 @@ class GrabImage(QtWidgets.QWidget):
         self.y11 = None
         self.x22 = None
         self.y22 = None
+        icon = QtGui.QIcon("reluu_gui\\auxiliary_files\\logo_transparent_background.png")
+        self.setWindowIcon(icon)
 
     def start_grab(self):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)

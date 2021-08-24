@@ -521,7 +521,7 @@ class Ui_MainWindow(object):
         self.logo.setMaximumSize(QSize(150, 150))
         cur_dir = os.getcwd()
         # os.chdir(sys._MEIPASS)
-        self.logo_mainMenu.setPixmap(QPixmap(u"auxiliary_files\\logo_transparent_background.png"))
+        self.logo_mainMenu.setPixmap(QPixmap(u"reluu_gui\\auxiliary_files\\logo_transparent_background.png"))
         os.chdir(cur_dir)
         self.logo.setScaledContents(True)
         self.logo.setAlignment(Qt.AlignCenter)

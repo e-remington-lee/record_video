@@ -63,7 +63,7 @@ class ActiveModelWindow(QtWidgets.QWidget, Ui_active_model):
         super(ActiveModelWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.setWindowTitle('ReLuu')
-        icon = QtGui.QIcon("auxiliary_files/logo_transparent_background.png")
+        icon = QtGui.QIcon("reluu_gui\\auxiliary_files\\logo_transparent_background.png")
         self.setWindowIcon(icon)
 
         qrect = self.frameGeometry()

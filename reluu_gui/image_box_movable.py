@@ -45,7 +45,7 @@ class ImageBox(QWidget):
         self.setWindowTitle('ReLuu')
         cur_dir = os.getcwd()
         # os.chdir(sys._MEIPASS)
-        icon = QIcon("auxiliary_files\\logo_transparent_background.png")
+        icon = QIcon("reluu_gui\\auxiliary_files\\logo_transparent_background.png")
         self.setWindowIcon(icon)
         os.chdir(cur_dir)
 

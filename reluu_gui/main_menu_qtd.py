@@ -70,7 +70,7 @@ class Ui_mainMenu(object):
         self.logo_mainMenu.setMaximumSize(QSize(150, 150))
         cur_dir = os.getcwd()
         # os.chdir(sys._MEIPASS)
-        self.logo_mainMenu.setPixmap(QPixmap(u"auxiliary_files\\logo_transparent_background.png"))
+        self.logo_mainMenu.setPixmap(QPixmap(u"reluu_gui\\auxiliary_files\\logo_transparent_background.png"))
         os.chdir(cur_dir)
         self.logo_mainMenu.setScaledContents(True)
 

@@ -63,7 +63,7 @@ class MainMenu(QtWidgets.QWidget, Ui_mainMenu):
         self.setupUi(self)
         cur_dir = os.getcwd()
         # os.chdir(sys._MEIPASS)
-        icon = QtGui.QIcon("auxiliary_files\\logo_transparent_background.png")
+        icon = QtGui.QIcon("reluu_gui\\auxiliary_files\\logo_transparent_background.png")
         self.setWindowIcon(icon)
         os.chdir(cur_dir)
 

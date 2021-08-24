@@ -13,6 +13,7 @@ class ReluuModel():
     def __init__(self, outputs_queue):
         # os.chdir(sys._MEIPASS)
         self.model = tflite.Interpreter("tflite_model\\optimized_model_v4.0.0_7779.tflite")
+        # self.model = tflite.Interpreter("tflite_model\\cmu_0.0.1.tflite")
         self.path = "output\\"
         self.outputs_queue = outputs_queue
         self.front_face_cascade = cv2.CascadeClassifier("cascades\\haarcascade_frontalface_default.xml")
@@ -30,6 +31,7 @@ class ReluuModel():
                     # crop face
                     for (x,y,w,h) in face:
                         cropped_face = img[y:y+h, x:x+w]
+                        #TODO is this needed? we convert it to an array before this
                         cropped_face = np.array(cropped_face)
 
                         if ReluuModel.debug:
