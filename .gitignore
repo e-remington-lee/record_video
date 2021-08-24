@@ -33,10 +33,8 @@ parse_dataset_labels/parse_sound_files/tess_ravdess_test.json
 parse_dataset_labels/parse_sound_files/tess_ravdess_train_norm.json
 parse_dataset_labels/parse_sound_files/tess_ravdess_validation_norm.json
 parse_dataset_labels/parse_sound_files/tess_ravdess_test_norm.json
-process_mmsdk/mosei_dataset.csv
-process_mmsdk/mosei_dataset copy.csv
-process_mmsdk/mosei_dataset_int.csv
-process_mmsdk/mosei_dataset_int copy.csv
+process_mmsdk/*.csv
+
 
 databases
 labeled_data
